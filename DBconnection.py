@@ -19,13 +19,19 @@ try:
          print("server connected via SSH")
 
 
-         engine = create_engine(r'postgres://cs421g53:Gourmet53[]@comp421.cs.mcgill.ca:5432/cs421')
-         c = engine.connect()
+         db = create_engine('postgres://cs421g53:Gourmet53[]@comp421.cs.mcgill.ca:5432/cs421')
+         print("yes")
+         conn = db.connect()
          #conn = connect(host='comp421.cs.mcgill.ca',password='Gourmet53[]', database='cs421', user='cs421g53', port='5432')
-         conn = c.connection
-         curs = conn.cursor()
          print("database connected")
+         result = conn.execute('SELECT * from restaurant')
+         for r in result:
+            print(r)
          conn.close()
 
 except:
     print("Connection Failed")
+
+
+
+
