@@ -1,4 +1,3 @@
-#import psycopg2
 import sshtunnel
 import sqlalchemy
 import pandas.io.sql as psql
@@ -25,7 +24,15 @@ try:
          conn = c.connection
          curs = conn.cursor()
          print("database connected")
-         conn.close()
+
+         query = "SELECT * FROM users"
+         curs.execute(query)
+         df = psql.DataFrame(curs.fetchall())
+         
+        
 
 except:
     print("Connection Failed")
+
+finally:
+    conn.close()
