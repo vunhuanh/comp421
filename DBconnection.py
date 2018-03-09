@@ -1,4 +1,4 @@
-import psycopg2
+#import psycopg2
 import sshtunnel
 import sqlalchemy
 import pandas.io.sql as psql
