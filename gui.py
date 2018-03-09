@@ -1,6 +1,14 @@
 #!/usr/bin/python
+import Tkinter
 
-import tkinter
-top = tkinter.Tk()
+from Tkinter import *
+
+parentw = Tkinter.Tk()
 # Code to add widgets will go here...
-top.mainloop()
+
+
+text = Text(parentw)
+text.insert(INSERT, "hello world")
+text.pack()
+
+parentw.mainloop()
