@@ -23,9 +23,7 @@ def connecting():
 
             db = create_engine(r'postgres://cs421g53:Gourmet53[]@comp421.cs.mcgill.ca:5432/cs421')
             return db
-            # conn = db.connect()
-            # print("database connected")
-            # conn.close()
+
 
     except:
         print("Connection Failed")
