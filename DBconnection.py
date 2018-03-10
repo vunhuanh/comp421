@@ -1,9 +1,9 @@
-import psycopg2
 import sshtunnel
 import sqlalchemy
 import pandas.io.sql as psql
 from sshtunnel import SSHTunnelForwarder
 from sqlalchemy import create_engine
+
 
 def connecting():
     try:
@@ -27,3 +27,4 @@ def connecting():
 
     except:
         print("Connection Failed")
+
