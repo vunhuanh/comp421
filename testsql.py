@@ -2,15 +2,11 @@ import psycopg2
 import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
-<<<<<<< HEAD
 from sqlalchemy import Table, Column, String, MetaData
-=======
->>>>>>> master
 
 def select():
     db = DBconnection.connecting()
     conn = db.connect()
-<<<<<<< HEAD
     table = "restaurant"
     query = "SELECT * FROM {0}".format(table)
     query2 = "hi"
@@ -26,12 +22,6 @@ def select():
 def update():
     db = DBconnection.connecting()
     conn = db.connect()
-=======
-    query = "SELECT * FROM 
-    result_set = conn.execute(query)  
-    for r in result_set:  
-        print(r)
->>>>>>> master
 
 if __name__=='__main__': 
     select()
