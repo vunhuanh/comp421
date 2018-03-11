@@ -7,6 +7,7 @@ from sqlalchemy import Table, Column, String, MetaData
 def select():
     db = DBconnection.connecting()
     conn = db.connect()
+    print("DB connected")
     table = "restaurant"
     query = "SELECT * FROM {0}".format(table)
     query2 = "hi"

@@ -9,10 +9,7 @@ def connecting():
     try:
 
         with sshtunnel.SSHTunnelForwarder(
-
             ('comp421.cs.mcgill.ca', 22),
-            #ssh_private_key="</path/to/private/ssh/key>",
-            ### in my case, I used a password instead of a private key
             ssh_username="cs421g53",
             ssh_password="Gourmet53[]", 
             remote_bind_address=('localhost', 5432)) as server:
