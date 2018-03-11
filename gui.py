@@ -21,16 +21,19 @@ class Application(Frame):
 
     #Create widgets inside of the master window
     def create_widgets(self):
+        #Set width to column 0
         self.grid_columnconfigure(0, minsize=100)
+        #Grid settings
         w1 = Text(self, undo=True, height=1, width=26,wrap=NONE)
         w1.grid(row=0, column=1, padx=5, pady=5, sticky=W)
         
+        #Header
         self.title = Label(self, text="GOURMET")
         self.title.grid(row=0, column=1)
-
         self.desc = Label(self, text="Gourmet is an application which lets you reserve tables in our partnered restaurants, as well as buy event tickets and food.\n\n", wraplength=500)
         self.desc.grid(row=1, column=1, sticky=E)
 
+        #Buttons
         self.signup_btn = Button(self, text="Sign up")
         self.signup_btn.bind('<Button-1>', self.signup)
         self.signup_btn.grid(row=2, column=1, sticky=W)
@@ -49,12 +52,9 @@ class Application(Frame):
         ### once logged in, display the homepage.py frame
 
 
-
-
     #Start the main loop
     def start(self):
         self.master.mainloop()
         
-
 
 Application().start()
