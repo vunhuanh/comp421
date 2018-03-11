@@ -1,60 +1,45 @@
-import Tkinter
-from Tkinter import *
+import Tkinter as tk   
+import psycopg2
+import sqlalchemy
+import pandas.io.sql as psql
+import DBconnection
+from sqlalchemy import Table, Column, String, MetaData
 
-#Other pages/functions
-import homepage
+# Other modules/functions
+from mainpage import Mainpage
+from homepage import Homepage
 import login
 import signup
 
+# Main application container
+class Application(tk.Tk):
 
-# Code to add widgets will go here...
-class Application(Frame):
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
 
-    #Customize the master window
-    def __init__(self):
-        self.master = Tk()
-        self.master.geometry("800x500")
-
-        Frame.__init__(self, self.master)
+        # Container for frames
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        self.geometry("800x500")
         self.grid()
-        self.create_widgets()
 
-    #Create widgets inside of the master window
-    def create_widgets(self):
-        #Set width to column 0
-        self.grid_columnconfigure(0, minsize=100)
-        #Grid settings
-        w1 = Text(self, undo=True, height=1, width=26,wrap=NONE)
-        w1.grid(row=0, column=1, padx=5, pady=5, sticky=W)
-        
-        #Header
-        self.title = Label(self, text="GOURMET")
-        self.title.grid(row=0, column=1)
-        self.desc = Label(self, text="Gourmet is an application which lets you reserve tables in our partnered restaurants, as well as buy event tickets and food.\n\n", wraplength=500)
-        self.desc.grid(row=1, column=1, sticky=E)
+        # Define frames
+        self.frames = {}
+        self.frames["mainpage"] = Mainpage(parent=container, controller=self)
+        self.frames["mainpage"].grid(row=0, column=0, sticky="nsew")
 
-        #Buttons
-        self.signup_btn = Button(self, text="Sign up")
-        self.signup_btn.bind('<Button-1>', self.signup)
-        self.signup_btn.grid(row=2, column=1, sticky=W)
+        self.frames["homepage"] = Homepage(parent=container, controller=self)
+        self.frames["homepage"].grid(row=0, column=0, sticky="nsew")
 
-        self.login_btn = Button(self, text="Log in")
-        self.login_btn.bind('<Button-1>', self.login)
-        self.login_btn.grid(row=2, column=1, sticky=E)
+        # Go to mainpage (before login)
+        self.show_frame("mainpage")
 
-    #Signup
-    def signup(self, event):
-        hp = signup.display(self)
+    # Show a frame for the given page name
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
 
-    #Login
-    def login(self, event):
-        hp = login.display(self)
-        ### once logged in, display the homepage.py frame
-
-
-    #Start the main loop
-    def start(self):
-        self.master.mainloop()
-        
-
-Application().start()
+# Start application
+if __name__ == "__main__":
+    app = Application()
+    app.mainloop()
