@@ -66,19 +66,16 @@ class Homepage(tk.Frame):
 
     # View points
     def points(self, event):
-        '''db = DBconnection.connecting()
-        conn = db.connect()
-        table = "users"
         useremail = "nhu.vu@mail.mcgill.ca"
-        query = "SELECT points FROM {0} WHERE username = {1}".format(table, useremail)
-        result_set = conn.execute(query)  
-        for r in result_set:  
-            #get the first column
-            print(r[0])
-            #get the second column
-        conn.close()'''
 
-        nbpoints = 200
+        db = DBconnection.connecting()
+        conn = db.connect()
+        query = "SELECT points FROM users WHERE useremail='{0}';".format(useremail)
+        result_set = conn.execute(query)  
+        conn.close()
+        for r in result_set:  
+            nbpoints = r[0]
+        
         strpoints = "You have "
         strpoints += str(nbpoints)
         strpoints += " points"
@@ -113,5 +110,6 @@ class Homepage(tk.Frame):
     def review(self, event):
         print ""
         #self.controller.show_frame("Review")
+
 
 
