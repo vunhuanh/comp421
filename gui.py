@@ -21,6 +21,7 @@ class Application(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+        self.winfo_toplevel().title("Gourmet")
 
         # Container for frames
         self.geometry("800x500")

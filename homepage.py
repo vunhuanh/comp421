@@ -66,7 +66,7 @@ class Homepage(tk.Frame):
 
     # View points
     def points(self, event):
-        db = DBconnection.connecting()
+        '''db = DBconnection.connecting()
         conn = db.connect()
         table = "users"
         useremail = "nhu.vu@mail.mcgill.ca"
@@ -76,6 +76,14 @@ class Homepage(tk.Frame):
             #get the first column
             print(r[0])
             #get the second column
+        conn.close()'''
+
+        nbpoints = 200
+        strpoints = "You have "
+        strpoints += str(nbpoints)
+        strpoints += " points"
+        self.point = tk.Label(self, text=strpoints)
+        self.point.grid(row=3, column=3)
 
     # View upcoming reservations
     def u_resr(self, event):
