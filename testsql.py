@@ -7,6 +7,7 @@ from sqlalchemy import Table, Column, String, MetaData
 def select():
     db = DBconnection.connecting()
     conn = db.connect()
+    print("DB connected")
     table = "restaurant"
     query = "SELECT * FROM {0}".format(table)
     query2 = "hi"
@@ -16,7 +17,7 @@ def select():
         #get the first column
         print(r[0])
         #get the second column
-
+    conn.close()
 
 def update():
     db = DBconnection.connecting()

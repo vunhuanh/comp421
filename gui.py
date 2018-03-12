@@ -1,46 +1,64 @@
-#!/usr/bin/python
-import Tkinter
+import Tkinter as tk   
+import psycopg2
+import sqlalchemy
+import pandas.io.sql as psql
+import DBconnection
+from sqlalchemy import Table, Column, String, MetaData
 
-from Tkinter import *
+# Other modules/functions
+from mainpage import Mainpage
+from homepage import Homepage
+from userupcoming import UserResr
+from userupcoming import UserPickup
+from userupcoming import UserEvent
+from pickupevent import Pickup
+from pickupevent import Event
+import login
+import signup
 
-# Code to add widgets will go here...
-class Application(Frame):
+# Main application container
+class Application(tk.Tk):
 
-    #Customize the master window
-    def __init__(self):
-        self.master = Tk()
-        self.master.geometry("1000x500")
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
+        self.winfo_toplevel().title("Gourmet")
 
-        Frame.__init__(self, self.master)
-        self.create_widgets()
+        # Container for frames
+        self.geometry("800x500")
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
 
-    #Create widgets inside of the master window
-    def create_widgets(self):
-        self.master.bind('<Return>', self.parse)
-        self.grid()
+        # Define frames
+        self.frames = {}
+        self.frames["Mainpage"] = Mainpage(parent=container, controller=self)
+        self.frames["Mainpage"].grid(row=0, column=0, sticky="nsew")
+        self.frames["Homepage"] = Homepage(parent=container, controller=self)
+        self.frames["Homepage"].grid(row=0, column=0, sticky="nsew")
 
-        w1 = Text(self, undo=True, height=1, width=26,wrap=NONE)
-        w1.grid(row=0, column=1, padx=5, pady=5, sticky=W)
-        
-        self.title = Label(self, text="GOURMET")
-        self.title.grid(row=0, column=1, sticky=E)
+        self.frames["UserResr"] = UserResr(parent=container, controller=self)
+        self.frames["UserResr"].grid(row=0, column=0, sticky="nsew")
+        self.frames["UserPickup"] = UserPickup(parent=container, controller=self)
+        self.frames["UserPickup"].grid(row=0, column=0, sticky="nsew")
+        self.frames["UserEvent"] = UserEvent(parent=container, controller=self)
+        self.frames["UserEvent"].grid(row=0, column=0, sticky="nsew")
 
-        self.desc = Label(self, text="Gourmet is an application which lets you reserve tables in our partnered restaurants, as well as buy event tickets and food.\n\n", wraplength=500)
-        self.desc.grid(row=1, column=1, sticky=E)
+        #self.frames["Resr"] = Resr(parent=container, controller=self)
+        #self.frames["Resr"].grid(row=0, column=0, sticky="nsew")
+        self.frames["Pickup"] = Pickup(parent=container, controller=self)
+        self.frames["Pickup"].grid(row=0, column=0, sticky="nsew")
+        self.frames["Event"] = Event(parent=container, controller=self)
+        self.frames["Event"].grid(row=0, column=0, sticky="nsew")
 
-        self.submit = Button(self, text="Submit")
-        self.submit.bind('<Button-1>', self.parse)
-        self.submit.grid(row=2, column=2, sticky=E)
+        # Go to mainpage (before login)
+        self.show_frame("Mainpage")
 
-
-    #Actions performed after click the button
-    def parse(self, event):
-        print("You clicked?")
-
-
-    #Start the main loop
-    def start(self):
-        self.master.mainloop()
+    # Show a frame for the given page name
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
 
 
-Application().start()
+# Start application
+if __name__ == "__main__":
+    app = Application()
+    app.mainloop()
