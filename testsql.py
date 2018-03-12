@@ -17,7 +17,7 @@ def select():
         #get the first column
         print(r[0])
         #get the second column
-
+    conn.close()
 
 
 def update():
