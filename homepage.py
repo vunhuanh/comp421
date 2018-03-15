@@ -28,10 +28,16 @@ class Homepage(tk.Frame):
         self.desc.grid(row=2, column=1)
 
         # Logout
-        self.hp_btn = tk.Button(self, text="Logout")
-        self.hp_btn.grid(row=0, column=3)
+        self.logout_btn = tk.Button(self, text="Logout")
+        self.logout_btn.bind('<Button-1>', self.logout)
+        self.logout_btn.grid(row=0, column=3)
 
-        # Buttons
+        # Cart
+        self.cart_btn = tk.Button(self, text="Cart")
+        self.cart_btn.bind('<Button-1>', self.cart)
+        self.cart_btn.grid(row=2, column=3)
+
+        # Buttons for all actions user can take
         self.points_btn = tk.Button(self, text="View my points")
         self.points_btn.bind('<Button-1>', self.points)
         self.points_btn.grid(row=3, column=1, sticky=tk.W)
@@ -64,10 +70,20 @@ class Homepage(tk.Frame):
         self.review_btn.bind('<Button-1>', self.review)
         self.review_btn.grid(row=10, column=1, sticky=tk.W)
 
+    # Logout
+    # Sihyeon's part
+    def logout(self, event):
+        print "logout"
+
+    def cart(self, event):
+        self.controller.show_frame("Cart")
+
     # View points
     def points(self, event):
+        # Get user email from session variable
         useremail = "nhu.vu@mail.mcgill.ca"
 
+        # Connect to DB and select user's points
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT points FROM users WHERE useremail='{0}';".format(useremail)
@@ -95,6 +111,7 @@ class Homepage(tk.Frame):
         self.controller.show_frame("UserEvent")
 
     # View upcoming reservations
+    # Chris's part
     def resr(self, event):
         self.controller.show_frame("Resr")
 
@@ -107,8 +124,9 @@ class Homepage(tk.Frame):
         self.controller.show_frame("Event")
 
     # Review restaurant
+    # Siyu's part
     def review(self, event):
-        print ""
+        print "review"
         #self.controller.show_frame("Review")
 
 

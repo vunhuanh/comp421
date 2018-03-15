@@ -24,7 +24,7 @@ class UserResr(tk.Frame):
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=3)
-        self.desc = tk.Label(self, text="Here are your upcoming food pickups.")
+        self.desc = tk.Label(self, text="You have upcoming reservations from the following restaurants")
         self.desc.grid(row=1, column=1)
 
         useremail = "nhu.vu@mail.mcgill.ca"
@@ -72,7 +72,7 @@ class UserPickup(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=3)
 
-        self.desc = tk.Label(self, text="You have upcoming food pickups from the following restaurants:")
+        self.desc = tk.Label(self, text="You have upcoming food pickups from the following restaurants")
         self.desc.grid(row=1, column=1)
 
         useremail = "nhu.vu@mail.mcgill.ca"
@@ -119,7 +119,7 @@ class UserEvent(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=3)
 
-        self.desc = tk.Label(self, text="Here are your upcoming events.")
+        self.desc = tk.Label(self, text="You have upcoming events from the following restaurants")
         self.desc.grid(row=1, column=1)
 
         useremail = "nhu.vu@mail.mcgill.ca"

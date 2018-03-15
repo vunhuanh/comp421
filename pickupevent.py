@@ -26,8 +26,29 @@ class Pickup(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=3)
 
-        self.desc = tk.Label(self, text="Search for restaurants for pickup")
+        self.desc = tk.Label(self, text="Here are all restaurants available for food pickup")
         self.desc.grid(row=1, column=1)
+
+        db = DBconnection.connecting()
+        conn = db.connect()
+        query = "SELECT DISTINCT r.licensenb, r.restaurantname FROM food_menu f, restaurant r WHERE f.licensenb = r.licensenb;"
+        result_set = conn.execute(query)  
+        conn.close()
+
+        licensenb = []
+        restau = []
+        for r in result_set:
+            licensenb.append(r[0])
+            restau.append(r[1])
+        
+        irow = 2
+        i = 0
+        for r in restau:
+            self.resr = tk.Label(self, text=restau[i])
+            self.resr.grid(row=irow, column=1)  
+            i += 1 
+            irow += 1
+
 
     # Go to homepage
     def homepage(self, event):
@@ -53,8 +74,28 @@ class Event(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=3)
 
-        self.desc = tk.Label(self, text="Search for restaurants that are hosting events")
+        self.desc = tk.Label(self, text="Search for restaurants that are hosting events soon")
         self.desc.grid(row=1, column=1)
+
+        db = DBconnection.connecting()
+        conn = db.connect()
+        query = "SELECT DISTINCT licensenb, restaurantname, eventname, eventdate, eventprice FROM upcomingevents;"
+        result_set = conn.execute(query)  
+        conn.close()
+
+        licensenb = []
+        restau = []
+        for r in result_set:
+            licensenb.append(r[0])
+            restau.append(r[1])
+        
+        irow = 2
+        i = 0
+        for r in restau:
+            self.resr = tk.Label(self, text=restau[i])
+            self.resr.grid(row=irow, column=1)  
+            i += 1 
+            irow += 1
 
     # Go to homepage
     def homepage(self, event):
