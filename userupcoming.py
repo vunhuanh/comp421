@@ -28,8 +28,10 @@ class UserResr(tk.Frame):
         self.desc = tk.Label(self, text="You have upcoming reservations from the following restaurants:", wraplength=400)
         self.desc.grid(row=1, column=1)
 
+        # Get global useremail
         useremail = "nhu.vu@mail.mcgill.ca"
 
+        # Connect to DB and get info
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT restaurantname, r.time FROM (SELECT * FROM user_books WHERE useremail = '{0}') as u JOIN (SELECT * FROM reservation WHERE time > now()) as r ON u.reservationid = r.reservationid JOIN (SELECT * FROM reservation_contains) as rc ON r.reservationid = rc.reservationid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON rc.licenseNB = res.licenseNB;".format(useremail)
@@ -42,6 +44,7 @@ class UserResr(tk.Frame):
             restau.append(r[0])
             time.append(r[1])
         
+        # Print relevant info
         self.name = tk.Label(self, text="Restaurant")
         self.name.grid(row=3, column=1)
         self.time = tk.Label(self, text="Time")
@@ -86,8 +89,10 @@ class UserPickup(tk.Frame):
         self.desc = tk.Label(self, text="You have upcoming food pickups from the following restaurants:", wraplength=400)
         self.desc.grid(row=1, column=1)
 
+        # Get global useremail
         useremail = "nhu.vu@mail.mcgill.ca"
 
+        # Connect to DB and get info
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT restaurantname FROM (SELECT * FROM transaction WHERE useremail = '{0}' AND transactiondate = current_date) as t JOIN (SELECT * FROM pickup_order) as p ON t.cartid = p.cartid JOIN  (SELECT licenseNB, restaurantname FROM restaurant) as res ON p.licenseNB = res.licenseNB;".format(useremail)
@@ -98,6 +103,7 @@ class UserPickup(tk.Frame):
         for r in result_set:
             restau.append(r[0])
         
+        # Print relevant info
         irow = 3
         i = 0
         for r in restau:
@@ -134,8 +140,10 @@ class UserEvent(tk.Frame):
         self.desc = tk.Label(self, text="You have upcoming events from the following restaurants", wraplength=400)
         self.desc.grid(row=1, column=1)
 
+        # Get global useremail
         useremail = "nhu.vu@mail.mcgill.ca"
 
+        # Connect to DB and get info
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT restaurantname, eventname, eventdate FROM (SELECT * FROM transaction WHERE useremail = '{0}') as t JOIN (SELECT * FROM event_order WHERE eventdate > now()) as e ON t.cartid = e.cartid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON e.licenseNB = res.licenseNB;".format(useremail)
@@ -150,6 +158,7 @@ class UserEvent(tk.Frame):
             event.append(r[1])
             date.append(r[2])
         
+        # Print relevant info
         self.name = tk.Label(self, text="Restaurant")
         self.name.grid(row=3, column=0)
         self.event = tk.Label(self, text="Event")

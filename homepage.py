@@ -71,7 +71,7 @@ class Homepage(tk.Frame):
         self.review_btn.grid(row=10, column=1, sticky=tk.W)
 
     # Logout
-    # Sihyeon's part
+    # Sihyeon
     def logout(self, event):
         print "logout"
 
@@ -111,9 +111,9 @@ class Homepage(tk.Frame):
         self.controller.show_frame("UserEvent")
 
     # View upcoming reservations
-    # Chris's part
+    # Chris
     def resr(self, event):
-        self.controller.show_frame("Resr")
+        print "reserve"
 
     # View upcoming pickup orders
     def pickup(self, event):
@@ -124,7 +124,7 @@ class Homepage(tk.Frame):
         self.controller.show_frame("Event")
 
     # Review restaurant
-    # Siyu's part
+    # Siyu
     def review(self, event):
         print "review"
         #self.controller.show_frame("Review")

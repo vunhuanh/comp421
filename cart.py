@@ -5,7 +5,7 @@ import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 
-# Frame for upcoming user reservations
+# Frame for upcoming user cart
 class Cart(tk.Frame):
 
     def __init__(self, parent, controller):
