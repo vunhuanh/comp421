@@ -7,13 +7,14 @@ import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 
 # Other modules/functions
-import globalvar #file containing global variables
+import globalvar #file containing global variables - not sure if we should keep
 from mainpage import Mainpage
 from homepage import Homepage
 from cart import Cart
 from userupcoming import UserResr
 from userupcoming import UserPickup
 from userupcoming import UserEvent
+from reserve import Reserve
 from pickup import Pickup
 from pickup import R_menu
 from event import Event
@@ -25,7 +26,7 @@ import signup
 
 # Main application container
 class Application(tk.Tk):
-    '''# Global variables idk why it doesn't work 
+    '''# Global variables idk why it doesn't work HELP
     global useremail
     global lnb_reserve
     global lnb_pickup
@@ -42,7 +43,7 @@ class Application(tk.Tk):
 
         # Define frames
         self.frames = {}
-        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Pickup, R_menu, Event, Cart, Review):
+        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, Pickup, R_menu, Event, Cart, Review):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
