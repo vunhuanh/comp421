@@ -1,4 +1,5 @@
-import Tkinter as tk   
+import Tkinter as tk
+from Tkinter import *
 import psycopg2
 import sqlalchemy
 import pandas.io.sql as psql

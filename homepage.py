@@ -30,12 +30,12 @@ class Homepage(tk.Frame):
         # Logout
         self.logout_btn = tk.Button(self, text="Logout")
         self.logout_btn.bind('<Button-1>', self.logout)
-        self.logout_btn.grid(row=0, column=3)
+        self.logout_btn.grid(row=0, column=0)
 
         # Cart
-        self.cart_btn = tk.Button(self, text="Cart")
+        self.cart_btn = tk.Button(self, text="My cart")
         self.cart_btn.bind('<Button-1>', self.cart)
-        self.cart_btn.grid(row=2, column=3)
+        self.cart_btn.grid(row=2, column=2)
 
         # Buttons for all actions user can take
         self.points_btn = tk.Button(self, text="View my points")
@@ -96,7 +96,7 @@ class Homepage(tk.Frame):
         strpoints += str(nbpoints)
         strpoints += " points"
         self.point = tk.Label(self, text=strpoints)
-        self.point.grid(row=3, column=3)
+        self.point.grid(row=3, column=2)
 
     # View upcoming reservations
     def u_resr(self, event):
