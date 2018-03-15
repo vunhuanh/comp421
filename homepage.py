@@ -22,9 +22,13 @@ class Homepage(tk.Frame):
         self.grid_columnconfigure(2, minsize=150)
         
         # Header
+            # Get user email from session variable
+        useremail = "nhu.vu@mail.mcgill.ca"
         self.title = tk.Label(self, text="GOURMET")
         self.title.grid(row=1, column=1)
-        self.desc = tk.Label(self, text="Welcome, <user>.")
+        msg = "Welcome, "
+        msg += useremail
+        self.desc = tk.Label(self, text=msg)
         self.desc.grid(row=2, column=1)
 
         # Logout
@@ -124,10 +128,9 @@ class Homepage(tk.Frame):
         self.controller.show_frame("Event")
 
     # Review restaurant
-    # Siyu
     def review(self, event):
         print "review"
-        #self.controller.show_frame("Review")
+        self.controller.show_frame("Review")
 
 
 
