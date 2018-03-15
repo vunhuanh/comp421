@@ -42,10 +42,12 @@ class Mainpage(tk.Frame):
 
     # Signup
     def signup(self, event):
+        #cf. signup.py
         hp = signup.display(self)
 
     # Login
     def login(self, event):
+        #cf. login.py
         hp = login.display(self)
         # Once logged in, display the homepage.py frame
 

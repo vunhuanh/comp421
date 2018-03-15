@@ -8,6 +8,7 @@ from sqlalchemy import Table, Column, String, MetaData
 # Other modules/functions
 from mainpage import Mainpage
 from homepage import Homepage
+from cart import Cart
 from userupcoming import UserResr
 from userupcoming import UserPickup
 from userupcoming import UserEvent
@@ -42,12 +43,20 @@ class Application(tk.Tk):
         self.frames["UserEvent"] = UserEvent(parent=container, controller=self)
         self.frames["UserEvent"].grid(row=0, column=0, sticky="nsew")
 
+        #for Chris's part - make your .py file first and import it
         #self.frames["Resr"] = Resr(parent=container, controller=self)
         #self.frames["Resr"].grid(row=0, column=0, sticky="nsew")
+
         self.frames["Pickup"] = Pickup(parent=container, controller=self)
         self.frames["Pickup"].grid(row=0, column=0, sticky="nsew")
         self.frames["Event"] = Event(parent=container, controller=self)
         self.frames["Event"].grid(row=0, column=0, sticky="nsew")
+        self.frames["Cart"] = Cart(parent=container, controller=self)
+        self.frames["Cart"].grid(row=0, column=0, sticky="nsew")
+
+        #for Siyu's part - make your .py file first and import it
+        #self.frames["Review"] = Review(parent=container, controller=self)
+        #self.frames["Review"].grid(row=0, column=0, sticky="nsew")
 
         # Go to mainpage (before login)
         self.show_frame("Mainpage")
