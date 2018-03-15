@@ -14,7 +14,6 @@ class Pickup(tk.Frame):
         self.controller = controller
         self.create_widgets()
 
-    # Create widgets inside homepage
     def create_widgets(self):
         # Set min width to columns
         self.grid_columnconfigure(0, minsize=150)
@@ -73,7 +72,6 @@ class R_menu(tk.Frame):
         self.controller = controller
         self.create_widgets()
 
-    # Create widgets inside homepage
     def create_widgets(self):
         # Set min width to columns
         self.grid_columnconfigure(0, minsize=150)
