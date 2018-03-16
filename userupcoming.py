@@ -33,7 +33,7 @@ class UserResr(tk.Frame):
         # Connect to DB and get info
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT restaurantname, r.time FROM (SELECT * FROM user_books WHERE useremail = '{0}') as u JOIN (SELECT * FROM reservation WHERE time > now()) as r ON u.reservationid = r.reservationid JOIN (SELECT * FROM reservation_contains) as rc ON r.reservationid = rc.reservationid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON rc.licenseNB = res.licenseNB;".format(useremail)
+        query = "SELECT restaurantname, r.time FROM (SELECT * FROM user_books WHERE useremail = '{0}') as u JOIN (SELECT * FROM reservation WHERE time > now()) as r ON u.reservationid = r.reservationid JOIN (SELECT * FROM reservation_contains) as rc ON r.reservationid = rc.reservationid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON rc.licenseNB = res.licenseNB ORDER BY r.time;".format(useremail)
         result_set = conn.execute(query)  
         conn.close()
 
@@ -143,7 +143,7 @@ class UserEvent(tk.Frame):
         # Connect to DB and get info
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT restaurantname, eventname, eventdate FROM (SELECT * FROM transaction WHERE useremail = '{0}') as t JOIN (SELECT * FROM event_order WHERE eventdate > now()) as e ON t.cartid = e.cartid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON e.licenseNB = res.licenseNB;".format(useremail)
+        query = "SELECT restaurantname, eventname, eventdate FROM (SELECT * FROM transaction WHERE useremail = '{0}') as t JOIN (SELECT * FROM event_order WHERE eventdate > now()) as e ON t.cartid = e.cartid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON e.licenseNB = res.licenseNB ORDER BY eventdate;".format(useremail)
         result_set = conn.execute(query)  
         conn.close()
 
