@@ -8,6 +8,10 @@ from sqlalchemy import Table, Column, String, MetaData
 
 # Other modules/functions
 import globalvar #file containing global variables - not sure if we should keep
+    #either keep these as functions and just have textboxes right on the mainpage
+    #or have separate signup/login pages
+import login
+import signup 
 from mainpage import Mainpage
 from homepage import Homepage
 from cart import Cart
@@ -19,9 +23,6 @@ from pickup import Pickup
 from pickup import R_menu
 from event import Event
 from review import Review
-import login
-import signup
-
 
 
 # Main application container

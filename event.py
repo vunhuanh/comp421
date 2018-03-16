@@ -34,7 +34,7 @@ class Event(tk.Frame):
         # Connect to DB and get info
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT DISTINCT licensenb, restaurantname, eventname, eventdate, eventprice FROM upcomingevents;"
+        query = "SELECT DISTINCT licensenb, restaurantname, eventname, eventdate, eventprice FROM upcomingevents ORDER BY eventdate;"
         result_set = conn.execute(query)  
         conn.close()
 
@@ -60,7 +60,7 @@ class Event(tk.Frame):
         self.event.grid(row=3, column=2)
         self.date = tk.Label(self, text="Date")
         self.date.grid(row=3, column=3)
-        self.price = tk.Label(self, text="Price (CAD)")
+        self.price = tk.Label(self, text="Price")
         self.price.grid(row=3, column=4)
         self.quantity = tk.Label(self, text="Quantity")
         self.quantity.grid(row=3, column=5)
