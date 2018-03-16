@@ -28,7 +28,7 @@ class Event(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
 
-        self.desc = tk.Label(self, text="Restaurants that are hosting events soon", wraplength=400)
+        self.desc = tk.Label(self, text="Restaurants hosting events soon", wraplength=300)
         self.desc.grid(row=1, column=1)
 
         # Connect to DB and get info
@@ -58,7 +58,7 @@ class Event(tk.Frame):
         self.name.grid(row=3, column=1)
         self.event = tk.Label(self, text="Event")
         self.event.grid(row=3, column=2)
-        self.date = tk.Label(self, text="Date")
+        self.date = tk.Label(self, text="Date (y-m-d)")
         self.date.grid(row=3, column=3)
         self.price = tk.Label(self, text="Price")
         self.price.grid(row=3, column=4)

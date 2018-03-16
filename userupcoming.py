@@ -24,7 +24,7 @@ class UserResr(tk.Frame):
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
-        self.desc = tk.Label(self, text="You have upcoming reservations from the following restaurants:", wraplength=400)
+        self.desc = tk.Label(self, text="You have upcoming reservations from the following restaurants:", wraplength=300)
         self.desc.grid(row=1, column=1)
 
         # Get global useremail
@@ -46,7 +46,7 @@ class UserResr(tk.Frame):
         # Print relevant info
         self.name = tk.Label(self, text="Restaurant")
         self.name.grid(row=3, column=1)
-        self.time = tk.Label(self, text="Time")
+        self.time = tk.Label(self, text="Time (y-m-d h:s)")
         self.time.grid(row=3, column=2)
 
         irow = 4
@@ -84,7 +84,7 @@ class UserPickup(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
 
-        self.desc = tk.Label(self, text="You have upcoming food pickups from the following restaurants:", wraplength=400)
+        self.desc = tk.Label(self, text="You have upcoming food pickups from the following restaurants:", wraplength=300)
         self.desc.grid(row=1, column=1)
 
         # Get global useremail
@@ -134,7 +134,7 @@ class UserEvent(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
 
-        self.desc = tk.Label(self, text="You have upcoming events from the following restaurants", wraplength=400)
+        self.desc = tk.Label(self, text="You have upcoming events from the following restaurants", wraplength=300)
         self.desc.grid(row=1, column=1)
 
         # Get global useremail
@@ -160,7 +160,7 @@ class UserEvent(tk.Frame):
         self.name.grid(row=3, column=0)
         self.event = tk.Label(self, text="Event")
         self.event.grid(row=3, column=1)
-        self.time = tk.Label(self, text="Date")
+        self.time = tk.Label(self, text="Date (y-m-d)")
         self.time.grid(row=3, column=2)
 
         irow = 4
