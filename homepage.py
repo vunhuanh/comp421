@@ -39,7 +39,7 @@ class Homepage(tk.Frame):
         # Cart
         self.cart_btn = tk.Button(self, text="My cart")
         self.cart_btn.bind('<Button-1>', self.cart)
-        self.cart_btn.grid(row=2, column=2)
+        self.cart_btn.grid(row=2, column=0)
 
         # Buttons for all actions user can take
         self.points_btn = tk.Button(self, text="View my points")
