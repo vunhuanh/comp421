@@ -1,4 +1,5 @@
-import Tkinter as tk   
+import Tkinter as tk
+from Tkinter import *
 import psycopg2
 import sqlalchemy
 import pandas.io.sql as psql
@@ -6,18 +7,31 @@ import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 
 # Other modules/functions
+import globalvar #file containing global variables - not sure if we should keep
+    #either keep these as functions and just have textboxes right on the mainpage
+    #or have separate signup/login pages
+import login
+import signup 
 from mainpage import Mainpage
 from homepage import Homepage
+from cart import Cart
 from userupcoming import UserResr
 from userupcoming import UserPickup
 from userupcoming import UserEvent
-from pickupevent import Pickup
-from pickupevent import Event
-import login
-import signup
+from reserve import Reserve
+from pickup import Pickup
+from pickup import R_menu
+from event import Event
+from review import Review
+
 
 # Main application container
 class Application(tk.Tk):
+    '''# Global variables idk why it doesn't work HELP
+    global useremail
+    global lnb_reserve
+    global lnb_pickup
+    global lnb_event'''
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -30,24 +44,11 @@ class Application(tk.Tk):
 
         # Define frames
         self.frames = {}
-        self.frames["Mainpage"] = Mainpage(parent=container, controller=self)
-        self.frames["Mainpage"].grid(row=0, column=0, sticky="nsew")
-        self.frames["Homepage"] = Homepage(parent=container, controller=self)
-        self.frames["Homepage"].grid(row=0, column=0, sticky="nsew")
-
-        self.frames["UserResr"] = UserResr(parent=container, controller=self)
-        self.frames["UserResr"].grid(row=0, column=0, sticky="nsew")
-        self.frames["UserPickup"] = UserPickup(parent=container, controller=self)
-        self.frames["UserPickup"].grid(row=0, column=0, sticky="nsew")
-        self.frames["UserEvent"] = UserEvent(parent=container, controller=self)
-        self.frames["UserEvent"].grid(row=0, column=0, sticky="nsew")
-
-        #self.frames["Resr"] = Resr(parent=container, controller=self)
-        #self.frames["Resr"].grid(row=0, column=0, sticky="nsew")
-        self.frames["Pickup"] = Pickup(parent=container, controller=self)
-        self.frames["Pickup"].grid(row=0, column=0, sticky="nsew")
-        self.frames["Event"] = Event(parent=container, controller=self)
-        self.frames["Event"].grid(row=0, column=0, sticky="nsew")
+        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, Pickup, R_menu, Event, Cart, Review):
+            page_name = F.__name__
+            frame = F(parent=container, controller=self)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
 
         # Go to mainpage (before login)
         self.show_frame("Mainpage")

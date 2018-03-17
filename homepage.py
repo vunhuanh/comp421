@@ -22,16 +22,26 @@ class Homepage(tk.Frame):
         self.grid_columnconfigure(2, minsize=150)
         
         # Header
+            # Get user email from session variable
+        useremail = "nhu.vu@mail.mcgill.ca"
         self.title = tk.Label(self, text="GOURMET")
         self.title.grid(row=1, column=1)
-        self.desc = tk.Label(self, text="Welcome, <user>.")
+        msg = "Welcome, "
+        msg += useremail
+        self.desc = tk.Label(self, text=msg)
         self.desc.grid(row=2, column=1)
 
         # Logout
-        self.hp_btn = tk.Button(self, text="Logout")
-        self.hp_btn.grid(row=0, column=3)
+        self.logout_btn = tk.Button(self, text="Logout")
+        self.logout_btn.bind('<Button-1>', self.logout)
+        self.logout_btn.grid(row=0, column=0)
 
-        # Buttons
+        # Cart
+        self.cart_btn = tk.Button(self, text="My cart")
+        self.cart_btn.bind('<Button-1>', self.cart)
+        self.cart_btn.grid(row=2, column=0)
+
+        # Buttons for all actions user can take
         self.points_btn = tk.Button(self, text="View my points")
         self.points_btn.bind('<Button-1>', self.points)
         self.points_btn.grid(row=3, column=1, sticky=tk.W)
@@ -64,26 +74,32 @@ class Homepage(tk.Frame):
         self.review_btn.bind('<Button-1>', self.review)
         self.review_btn.grid(row=10, column=1, sticky=tk.W)
 
+    # Logout
+    def logout(self, event):
+        print "logout"
+
+    def cart(self, event):
+        self.controller.show_frame("Cart")
+
     # View points
     def points(self, event):
-        '''db = DBconnection.connecting()
-        conn = db.connect()
-        table = "users"
+        # Get user email from session variable
         useremail = "nhu.vu@mail.mcgill.ca"
-        query = "SELECT points FROM {0} WHERE username = {1}".format(table, useremail)
-        result_set = conn.execute(query)  
-        for r in result_set:  
-            #get the first column
-            print(r[0])
-            #get the second column
-        conn.close()'''
 
-        nbpoints = 200
+        # Connect to DB and select user's points
+        db = DBconnection.connecting()
+        conn = db.connect()
+        query = "SELECT points FROM users WHERE useremail='{0}';".format(useremail)
+        result_set = conn.execute(query)  
+        conn.close()
+        for r in result_set:  
+            nbpoints = r[0]
+        
         strpoints = "You have "
         strpoints += str(nbpoints)
         strpoints += " points"
         self.point = tk.Label(self, text=strpoints)
-        self.point.grid(row=3, column=3)
+        self.point.grid(row=3, column=2)
 
     # View upcoming reservations
     def u_resr(self, event):
@@ -99,7 +115,7 @@ class Homepage(tk.Frame):
 
     # View upcoming reservations
     def resr(self, event):
-        self.controller.show_frame("Resr")
+        self.controller.show_frame("Reserve")
 
     # View upcoming pickup orders
     def pickup(self, event):
@@ -111,7 +127,8 @@ class Homepage(tk.Frame):
 
     # Review restaurant
     def review(self, event):
-        print ""
-        #self.controller.show_frame("Review")
+        print "review"
+        self.controller.show_frame("Review")
+
 
 

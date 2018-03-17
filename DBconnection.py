@@ -15,8 +15,7 @@ def connecting():
             remote_bind_address=('localhost', 5432)) as server:
 
             server.start() #start ssh server
-            print("server connected via SSH")
-
+            print "Server connected"
 
             db = create_engine(r'postgres://cs421g53:Gourmet53[]@comp421.cs.mcgill.ca:5432/cs421')
             return db

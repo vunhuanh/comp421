@@ -5,6 +5,7 @@ import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 
+
 # Frame for main page
 class Mainpage(tk.Frame):
 
@@ -42,11 +43,13 @@ class Mainpage(tk.Frame):
 
     # Signup
     def signup(self, event):
-        hp = signup.display(self)
+        #cf. signup.py
+        print "signup"
 
     # Login
     def login(self, event):
-        hp = login.display(self)
+        #cf. login.py
+        print "login"
         # Once logged in, display the homepage.py frame
 
     # Go to homepage
