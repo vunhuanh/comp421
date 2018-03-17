@@ -1,28 +1,65 @@
-#!/usr/bin/python
-import Tkinter
-
+import Tkinter as tk
 from Tkinter import *
+import psycopg2
+import sqlalchemy
+import pandas.io.sql as psql
+import DBconnection
+from sqlalchemy import Table, Column, String, MetaData
 
-parentw = Tkinter.Tk()
-# Code to add widgets will go here...
-
-#General intro text
-title = Label(parentw, text="GOURMET\n\n", anchor=CENTER)
-title.pack()
-desc = Label(parentw, text="Gourmet is an application which lets you reserve tables in our partnered restaurants, as well as buy event tickets and food.\n\n", anchor=CENTER)
-desc.pack()
-
-#Login, signup
-L1 = Label(parentw, text="Username")
-L1.pack(side = LEFT)
-E1 = Entry(parentw)
-E1.pack(side = RIGHT)
-
-L2 = Label(parentw, text="Password")
-L2.pack(side = LEFT)
-E2 = Entry(parentw)
-E2.pack(side = RIGHT)
+# Other modules/functions
+import globalvar #file containing global variables - not sure if we should keep
+    #either keep these as functions and just have textboxes right on the mainpage
+    #or have separate signup/login pages
+import login
+import signup 
+from mainpage import Mainpage
+from homepage import Homepage
+from cart import Cart
+from userupcoming import UserResr
+from userupcoming import UserPickup
+from userupcoming import UserEvent
+from reserve import Reserve
+from pickup import Pickup
+from pickup import R_menu
+from event import Event
+from review import Review
 
 
+# Main application container
+class Application(tk.Tk):
+    '''# Global variables idk why it doesn't work HELP
+    global useremail
+    global lnb_reserve
+    global lnb_pickup
+    global lnb_event'''
 
-mainloop()
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
+        self.winfo_toplevel().title("Gourmet")
+
+        # Container for frames
+        self.geometry("800x500")
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+
+        # Define frames
+        self.frames = {}
+        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, Pickup, R_menu, Event, Cart, Review):
+            page_name = F.__name__
+            frame = F(parent=container, controller=self)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        # Go to mainpage (before login)
+        self.show_frame("Mainpage")
+
+    # Show a frame for the given page name
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
+
+
+# Start application
+if __name__ == "__main__":
+    app = Application()
+    app.mainloop()
