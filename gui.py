@@ -17,6 +17,7 @@ from userupcoming import UserResr
 from userupcoming import UserPickup
 from userupcoming import UserEvent
 from reserve import Reserve
+from reserve import MakeReservation
 from pickup import Pickup
 from pickup import R_menu
 from event import Event
