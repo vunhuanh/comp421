@@ -9,7 +9,6 @@ from sqlalchemy import Table, Column, String, MetaData
 # Other modules/functions
 import datetime
 from changeglobal import setTime
-
 from signup import Signup
 from mainpage import Mainpage
 from homepage import Homepage
