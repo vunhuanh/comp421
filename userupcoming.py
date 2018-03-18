@@ -60,8 +60,6 @@ class UserResr(tk.Frame):
             i += 1 
             irow += 1
 
-    def display(self, event):
-        
 
     # Go to homepage
     def homepage(self, event):
