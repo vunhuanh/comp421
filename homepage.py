@@ -27,6 +27,7 @@ class Homepage(tk.Frame):
 
         #get the global variable from config.ini laterrr
         useremail = getGlobal('useremail')
+
         
         self.title = tk.Label(self, text="GOURMET")
         self.title.grid(row=1, column=1)
@@ -80,7 +81,8 @@ class Homepage(tk.Frame):
 
     # Logout
     def logout(self, event):
-        print "logout"
+        setGlobal('useremail', 'None')
+        self.controller.show_frame("Mainpage")
 
     def cart(self, event):
         self.controller.show_frame("Cart")
@@ -88,7 +90,8 @@ class Homepage(tk.Frame):
     # View points
     def points(self, event):
         # Get user email from session variable
-        useremail = "nhu.vu@mail.mcgill.ca"
+        useremail = getGlobal('useremail')
+
 
         # Connect to DB and select user's points
         db = DBconnection.connecting()
