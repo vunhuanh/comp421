@@ -20,14 +20,6 @@ class Pickup(tk.Frame):
         self.grid_columnconfigure(1, minsize=150)
         self.grid_columnconfigure(2, minsize=150)
         self.grid_rowconfigure(2, minsize=10)
-
-        # Display
-        self.display_btn = tk.Button(self, text="Display")
-        self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=4)
-        
-    # Display page contents
-    def display(self, event):
         
         # Header
         self.hp_btn = tk.Button(self, text="Homepage")
@@ -67,7 +59,6 @@ class Pickup(tk.Frame):
     def menu(self, event, arg):
         setGlobal('lnb_pickup', arg)
         self.controller.show_frame("R_menu")
-        print(globalvar.lnb_pickup)
 
     # Go to homepage
     def homepage(self, event):
@@ -108,13 +99,14 @@ class R_menu(tk.Frame):
 
         food = []
         price = []
+        quantities = []
         for r in result_set:
             food.append(r[0])
             price.append(r[1])
         
         # Print relevant info
-        self.cart = tk.Button(self, text="Add to cart")
-        self.cart.bind('<Button-1>', self.add2cart)
+        self.cart = tk.Button(self, text="Add to cart", )
+        self.cart.bind('<Button-1>', lambda event, arg1=quantities, arg2=food:self.add2cart(event, arg1, arg2))
         self.cart.grid(row=3, column=0)
         self.fd = tk.Label(self, text="Food")
         self.fd.grid(row=3, column=1)
@@ -125,6 +117,7 @@ class R_menu(tk.Frame):
 
         irow = 4
         i = 0
+        
         for r in food:
             self.food = tk.Label(self, text=food[i])
             self.food.grid(row=irow, column=1)  
@@ -133,12 +126,47 @@ class R_menu(tk.Frame):
             self.quantity = tk.Entry(self, width=10)
             self.quantity.insert(0, "0")
             self.quantity.grid(row=irow, column=3)
+            quantities.append(self.quantity)
 
             i += 1 
             irow += 1
 
-    def add2cart(self, event):
+    def add2cart(self, event, arg1, arg2):
+
+        #Connect to the db
+        db = DBconnection.connecting()
+        conn = db.connect()
+
+        #create a new cart id
+        query = "INSERT INTO cart VALUES (default);";
+        conn.execute(query)
+
+        query = "SELECT cartid FROM cart ORDER BY cartid DESC LIMIT 1;"
+        cartid = conn.execute(query)
+        for c in cartid:
+            realid = c[0]
+
+        print realid
+
+        #insert new records into pickup_order
+        i=0
+        licensenb = getGlobal('lnb_pickup')
         
+        for entry in arg1:
+            num = entry.get()
+            if int(num) > 0:
+                print "in"
+                print num
+                foodname = arg2[i]
+                query = "INSERT INTO pickup_order VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(realid, licensenb, foodname, num);
+                conn.execute(query)
+                i += 1
+            else:
+                i += 1
+                continue
+
+        conn.close() 
+                
 
     # Get global variable
     def getlnb(self):
@@ -147,4 +175,3 @@ class R_menu(tk.Frame):
     # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage")
-
