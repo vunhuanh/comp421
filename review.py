@@ -1,4 +1,5 @@
 import Tkinter as tk  
+#from Tkinter import *
 import psycopg2
 import sqlalchemy
 import pandas.io.sql as psql
@@ -12,6 +13,19 @@ class Review(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
+
+        self.canvas = tk.Canvas(self)
+        self.frame = tk.Frame(self.canvas)
+        
+        self.myscrollbar=tk.Scrollbar(self,orient="vertical",command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.myscrollbar.set)
+
+        self.myscrollbar.pack(side="right",fill="y")
+        self.canvas.pack(side="left")
+        self.canvas.create_window((0,0),window=self.frame,anchor='nw')
+
+
+
         self.create_widgets()
 
     def create_widgets(self):
