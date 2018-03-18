@@ -66,6 +66,7 @@ class Pickup(tk.Frame):
     def menu(self, event, arg):
         globalvar.lnb_pickup = arg
         self.controller.show_frame("R_menu")
+        print(globalvar.lnb_pickup)
 
     # Go to homepage
     def homepage(self, event):

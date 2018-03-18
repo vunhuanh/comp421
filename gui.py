@@ -17,6 +17,7 @@ from userupcoming import UserResr
 from userupcoming import UserPickup
 from userupcoming import UserEvent
 from reserve import Reserve
+from reserve import MakeReservation
 from pickup import Pickup
 from pickup import R_menu
 from event import Event
@@ -41,7 +42,7 @@ class Application(tk.Tk):
         # Define frames
         self.frames = {}
 
-        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, Pickup, R_menu, Event, Cart, Review, Login, Signup, AllReviews, MakeReview):
+        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, MakeReservation, Pickup, R_menu, Event, Cart, Review, Login, Signup, AllReviews, MakeReview):
 
             page_name = F.__name__
             frame = F(parent=container, controller=self)
