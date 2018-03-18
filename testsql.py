@@ -16,7 +16,6 @@ def select():
         #get the second column
 
 
-
 def update():
     db = DBconnection.connecting()
     conn = db.connect()

@@ -4,7 +4,6 @@ import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
-import globalvar
 
 # Frame for buying event tickets
 class Review(tk.Frame):
@@ -61,12 +60,16 @@ class Review(tk.Frame):
             i += 1 
             irow += 1
 
+    #See all reviews of other users
     def allreview(self, event):
-        print "all reviews"
-
+        self.controller.show_frame("AllReviews")
+         
+    #Make a new review for this restaurant
     def userreview(self, event):
-        print "userreviews"
+        self.controller.show_frame("MakeReview")
 
     # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage")
+        
+
