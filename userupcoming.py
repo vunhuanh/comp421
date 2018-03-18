@@ -28,13 +28,13 @@ class UserResr(tk.Frame):
         self.desc = tk.Label(self, text="You have upcoming reservations from the following restaurants:", wraplength=300)
         self.desc.grid(row=1, column=1)
 
-        #get the global variable from config.ini laterrr
+        #get the global variable from config.ini later
         useremail = getGlobal('useremail')
 
         # Connect to DB and get info
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT restaurantname, r.time FROM (SELECT * FROM user_books WHERE useremail = \'{0}\') as u JOIN (SELECT * FROM reservation WHERE time > now()) as r ON u.reservationid = r.reservationid JOIN (SELECT * FROM reservation_contains) as rc ON r.reservationid = rc.reservationid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON rc.licenseNB = res.licenseNB ORDER BY r.time;".format(useremail)
+        query = "SELECT restaurantname, r.time FROM (SELECT * FROM user_books WHERE useremail = {0}) as u JOIN (SELECT * FROM reservation WHERE time > now()) as r ON u.reservationid = r.reservationid JOIN (SELECT * FROM reservation_contains) as rc ON r.reservationid = rc.reservationid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON rc.licenseNB = res.licenseNB ORDER BY r.time;".format(useremail)
         result_set = conn.execute(query)  
         conn.close()
 
@@ -88,8 +88,8 @@ class UserPickup(tk.Frame):
         self.desc = tk.Label(self, text="You have upcoming food pickups from the following restaurants:", wraplength=300)
         self.desc.grid(row=1, column=1)
 
-        # Get global useremail
-        useremail = "nhu.vu@mail.mcgill.ca"
+        #get the global variable from config.ini later
+        useremail = getGlobal('useremail')
 
         # Connect to DB and get info
         db = DBconnection.connecting()
@@ -138,8 +138,8 @@ class UserEvent(tk.Frame):
         self.desc = tk.Label(self, text="You have upcoming events from the following restaurants", wraplength=300)
         self.desc.grid(row=1, column=1)
 
-        # Get global useremail
-        useremail = "nhu.vu@mail.mcgill.ca"
+        #get the global variable from config.ini later
+        useremail = getGlobal('useremail')
 
         # Connect to DB and get info
         db = DBconnection.connecting()
