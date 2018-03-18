@@ -61,12 +61,15 @@ class Signup(tk.Frame):
         
         try:
             result_set = conn.execute(query)
+            conn.close()
         except psycopg2.Error as e:
             tkMessageBox.showerror("error","the account is already existed")
+            conn.close()
         else:
             tkMessageBox.showinfo("account created", "your account is successfully created")
+            conn.close()
 
-            
+    
 
     def homepage(self, login):
         self.controller.show_frame("Homepage")
