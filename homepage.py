@@ -23,6 +23,13 @@ class Homepage(tk.Frame):
         self.grid_columnconfigure(1, minsize=150)
         self.grid_columnconfigure(2, minsize=150)
         
+        # Display
+        self.display_btn = tk.Button(self, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=0, column=4)
+    
+    # Display page contents
+    def display(self, event):
         # Header
         #get the global variable from config.ini laterrr
         useremail = getGlobal('useremail')
@@ -75,7 +82,7 @@ class Homepage(tk.Frame):
 
         self.review_btn = tk.Button(self, text="Review a restaurant")
         self.review_btn.bind('<Button-1>', self.review)
-        self.review_btn.grid(row=10, column=1, sticky=tk.W)
+        self.review_btn.grid(row=10, column=1, sticky=tk.W)  
 
     # Logout
     def logout(self, event):
@@ -108,7 +115,6 @@ class Homepage(tk.Frame):
 
     # View upcoming reservations
     def u_resr(self, event):
-        
         self.controller.show_frame("UserResr")
 
     # View upcoming pickup orders
