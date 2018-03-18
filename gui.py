@@ -57,6 +57,11 @@ class Application(tk.Tk):
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         frame.tkraise()
+        
+
+
+
+
 
 
 # Start application
