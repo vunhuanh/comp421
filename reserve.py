@@ -115,22 +115,31 @@ class MakeReservation(tk.Frame):
     def submitReservation(self,event):
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid"
+        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{0}';".format(globalvar.lnb_reserve)
         result_set = conn.execute(query)
         conn.close()
 
-        availableTables = []
-        for r in result_set:
-            availableTables.append(r[0])
-            availableTables.append(r[1])
-            availableTables.apped(r[2])
+        licenseNB = []
+        tables = []
+        capty = []
 
+        # for r in result_set:
+        #     licenseNB.append(r[0])
+        #     print(r[0])
+        #     tables.append(r[1])
+        #     print(r[1])
+        #     capty.append(r[2])
+        #     print(r[2])
+        u_time = time2.get()
+        u_date = date2.get()
+        u_quantity = quantity.get()
 
+        print(u_time)
+        print(u_date)
+        print(u_quantity)
 
         # Go to homepage
     def homepage(self, event):
-        self.controller.show_frame("Homepage")
-
-
+        self.controller.show_frame("Homepage") 
 
 
