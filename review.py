@@ -4,7 +4,6 @@ import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
-import globalvar
 
 # Frame for buying event tickets
 class Review(tk.Frame):

@@ -4,6 +4,7 @@ import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
+from changeglobal import setGlobal, getGlobal
 
 # Frame for home page
 class Homepage(tk.Frame):
@@ -16,14 +17,23 @@ class Homepage(tk.Frame):
     # Create widgets inside homepage
     def create_widgets(self):
         # Set min width to columns
+
         self.grid_rowconfigure(0, minsize=10)
         self.grid_columnconfigure(0, minsize=150)
         self.grid_columnconfigure(1, minsize=150)
         self.grid_columnconfigure(2, minsize=150)
         
         # Header
+<<<<<<< HEAD
         # Get user email from session variable
         useremail = "nhu.vu@mail.mcgill.ca"
+=======
+            # Get user email from session variable
+
+        #get the global variable from config.ini laterrr
+        useremail = getGlobal('useremail')
+        
+>>>>>>> master
         self.title = tk.Label(self, text="GOURMET")
         self.title.grid(row=1, column=1)
         msg = "Welcome, "
