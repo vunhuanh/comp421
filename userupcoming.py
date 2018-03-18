@@ -34,7 +34,7 @@ class UserResr(tk.Frame):
         # Connect to DB and get info
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT restaurantname, r.time FROM (SELECT * FROM user_books WHERE useremail = {0}) as u JOIN (SELECT * FROM reservation WHERE time > now()) as r ON u.reservationid = r.reservationid JOIN (SELECT * FROM reservation_contains) as rc ON r.reservationid = rc.reservationid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON rc.licenseNB = res.licenseNB ORDER BY r.time;".format(useremail)
+        query = "SELECT restaurantname, r.time FROM (SELECT * FROM user_books WHERE useremail = '{0}') as u JOIN (SELECT * FROM reservation WHERE time > now()) as r ON u.reservationid = r.reservationid JOIN (SELECT * FROM reservation_contains) as rc ON r.reservationid = rc.reservationid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON rc.licenseNB = res.licenseNB ORDER BY r.time;".format(useremail)
         result_set = conn.execute(query)  
         conn.close()
 
@@ -59,6 +59,9 @@ class UserResr(tk.Frame):
             self.time.grid(row=irow, column=2)  
             i += 1 
             irow += 1
+
+    def display(self, event):
+        
 
     # Go to homepage
     def homepage(self, event):

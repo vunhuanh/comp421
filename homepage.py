@@ -79,7 +79,7 @@ class Homepage(tk.Frame):
 
     # Logout
     def logout(self, event):
-        setGlobal('useremail', 'None')
+        setGlobal('useremail', 'admin')
         self.controller.show_frame("Mainpage")
 
     def cart(self, event):
@@ -108,6 +108,7 @@ class Homepage(tk.Frame):
 
     # View upcoming reservations
     def u_resr(self, event):
+        
         self.controller.show_frame("UserResr")
 
     # View upcoming pickup orders
