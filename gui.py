@@ -23,14 +23,11 @@ from pickup import R_menu
 from event import Event
 from review import Review
 from login import Login
+from reviewoptions import AllReviews
+from reviewoptions import MakeReview
 
 # Main application container
 class Application(tk.Tk):
-    '''# Global variables idk why it doesn't work HELP
-    global useremail
-    global lnb_reserve
-    global lnb_pickup
-    global lnb_event'''
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -43,7 +40,9 @@ class Application(tk.Tk):
 
         # Define frames
         self.frames = {}
+
         for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, Pickup, R_menu, Event, Cart, Review, Login, Signup):
+
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
