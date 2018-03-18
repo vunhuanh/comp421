@@ -52,6 +52,7 @@ class Login(tk.Frame):
         conn = db.connect()
         query = "SELECT COUNT(*) FROM users u WHERE u.useremail = \'{0}\' AND u.password = \'{1}\'; ".format(self.givenemail, self.givenpassword);
         result_set = conn.execute(query)
+        conn.close()
 
         count = []
         for r in result_set:
