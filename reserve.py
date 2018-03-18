@@ -4,7 +4,7 @@ import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
-import globalvar
+from changeglobal import setGlobal, getGlobal
 import datetime
 
 # Frame for buying event tickets
@@ -119,15 +119,18 @@ class MakeReservation(tk.Frame):
         self.u_date = self.date2.get()
         self.u_quantity = self.quantity.get()
 
+        licensenb = getGlobal('lnb_reserve')
+        useremail = getGlobal('useremail')
+
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{0}';".format(globalvar.lnb_reserve)
+        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{0}';".format(licensenb)
         result_set = conn.execute(query)
         conn.close()
 
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT licensenb FROM restaurant WHERE restaurant.licensenb = '{0}' AND restaurant.openinghours < '{1}' AND restaurant.closinghours > '{2}';".format(globalvar.lnb_reserve,self.u_time,self.u_time)
+        query = "SELECT licensenb FROM restaurant WHERE restaurant.licensenb = '{0}' AND restaurant.openinghours < '{1}' AND restaurant.closinghours > '{2}';".format(licensenb,self.u_time,self.u_time)
         result_set2 = conn.execute(query)
         conn.close()
 
@@ -184,13 +187,13 @@ class MakeReservation(tk.Frame):
 
             db = DBconnection.connecting()
             conn = db.connect()
-            query = "WITH email AS (SELECT cast('{0}' as text) AS var), rid AS (SELECT reservationid AS var FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) INSERT INTO user_books SELECT email.var, rid.var FROM email, rid;".format() #add useremail here (global var)
+            query = "WITH email AS (SELECT cast('{0}' as text) AS var), rid AS (SELECT reservationid AS var FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) INSERT INTO user_books SELECT email.var, rid.var FROM email, rid;".format(useremail)
             conn.execute(query)
             conn.close()
 
             db = DBconnection.connecting()
             conn = db.connect()
-            query = "WITH att AS (SELECT reservationid AS var FROM (SELECT * FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) as latest WHERE reservationid = latest.reservationid), restau AS (SELECT cast('{0}' as text) AS var), tablenb AS (SELECT 3 AS var) INSERT INTO reservation_contains SELECT att.var, restau.var, tablenb.var FROM att, restau, tablenb;".format(globalvar.lnb_reserve)
+            query = "WITH att AS (SELECT reservationid AS var FROM (SELECT * FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) as latest WHERE reservationid = latest.reservationid), restau AS (SELECT cast('{0}' as text) AS var), tablenb AS (SELECT 3 AS var) INSERT INTO reservation_contains SELECT att.var, restau.var, tablenb.var FROM att, restau, tablenb;".format(licensenb)
 
 
 
