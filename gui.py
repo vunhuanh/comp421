@@ -7,9 +7,6 @@ import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 
 # Other modules/functions
-import globalvar #file containing global variables - not sure if we should keep
-    #either keep these as functions and just have textboxes right on the mainpage
-    #or have separate signup/login pages
 from signup import Signup
 from mainpage import Mainpage
 from homepage import Homepage

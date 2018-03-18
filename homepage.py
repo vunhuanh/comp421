@@ -24,17 +24,9 @@ class Homepage(tk.Frame):
         self.grid_columnconfigure(2, minsize=150)
         
         # Header
-<<<<<<< HEAD
-        # Get user email from session variable
-        useremail = "nhu.vu@mail.mcgill.ca"
-=======
-            # Get user email from session variable
-
         #get the global variable from config.ini laterrr
         useremail = getGlobal('useremail')
 
-        
->>>>>>> master
         self.title = tk.Label(self, text="GOURMET")
         self.title.grid(row=1, column=1)
         msg = "Welcome, "
