@@ -69,9 +69,8 @@ class Reserve(tk.Frame):
             irow += 1
 
     def mkres(self, event, arg):
-        globalvar.lnb_reserve = arg
+        setGlobal('lnb_reserve',arg)
         self.controller.show_frame("MakeReservation")
-        print(globalvar.lnb_reserve)
 
     # Go to homepage
     def homepage(self, event):
@@ -132,7 +131,7 @@ class MakeReservation(tk.Frame):
 
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{0}';".format(licensenb)
+        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{0}';".format(licensenb)
         result_set = conn.execute(query)
         conn.close()
 
@@ -169,7 +168,7 @@ class MakeReservation(tk.Frame):
 
         print("total quant input: " + self.u_quantity)
 
-        timestamp = self.u_date + self.u_time
+        timestamp = self.u_date + " " + self.u_time
 
         if(int(self.u_quantity) > total_seats):
             print("There aren't enough seats to accomodate the number of diners mentioned.")
@@ -180,32 +179,80 @@ class MakeReservation(tk.Frame):
             print("Nope, not happening.")
 
         #Verifying date format
-        elif:
-            try:
-                datetime.datetime.strptime(self.u_date, '%Y-%m-%d')
-            except:
-                raise ValueError("Incorrect data format, should be YYY-MM-DD")
+        # elif(validate(self.u_date)):
+        #     print("Wrong date format")
 
         else:
+            print(useremail)
+
             db = DBconnection.connecting()
             conn = db.connect()
-            query = "INSERT INTO reservation VALUES (default, '{0}', '{1}');".format(timestamp,int(self.u_quantity))
+            conn.autocommit = True
+            query = "SELECT reservationid FROM reservation ORDER BY reservationid DESC LIMIT 1;"
+            rid = conn.execute(query)
+            conn.close()
+
+            for r in rid:
+                real_rid = r[0] + 1
+
+            # db = DBconnection.connecting()
+            # conn = db.connect()
+            # conn.autocommit = True
+            # query2 = "SELECT * FROM make_reservation('{0}',{1},'{2}','{3}',{4});".format(useremail,real_rid,licensenb,timestamp,self.u_quantity)
+            # result3 = conn.execute(query2)
+            # conn.close()
+
+            # for e in result3:
+            #     wreck = e[0]
+
+
+            # print(wreck)
+
+            db = DBconnection.connecting()
+            conn = db.connect()
+            conn.autocommit = True
+            query = "INSERT INTO reservation VALUES({0},'{1}',{2});".format(real_rid,timestamp,self.u_quantity)
             conn.execute(query)
             conn.close()
 
             db = DBconnection.connecting()
             conn = db.connect()
-            query = "WITH email AS (SELECT cast('{0}' as text) AS var), rid AS (SELECT reservationid AS var FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) INSERT INTO user_books SELECT email.var, rid.var FROM email, rid;".format(useremail)
+            conn.autocommit = True
+            query = "INSERT INTO user_books VALUES('{0}',{1});".format(useremail,real_rid)
             conn.execute(query)
             conn.close()
 
             db = DBconnection.connecting()
             conn = db.connect()
-            query = "WITH att AS (SELECT reservationid AS var FROM (SELECT * FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) as latest WHERE reservationid = latest.reservationid), restau AS (SELECT cast('{0}' as text) AS var), tablenb AS (SELECT 3 AS var) INSERT INTO reservation_contains SELECT att.var, restau.var, tablenb.var FROM att, restau, tablenb;".format(licensenb)
+            conn.autocommit = True
+            query = "INSERT INTO reservation_contains VALUES({0},'{1}',1);".format(real_rid,licensenb)
+            conn.execute(query)
+            conn.close()
 
+
+            # for r in res:
+            #     print(r)
+
+            # db = DBconnection.connecting()
+            # conn = db.connect()
+            # query ="WITH email AS (SELECT '{0}' AS var), rid AS (SELECT reservationid AS var FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) INSERT INTO user_books SELECT email.var, rid.var FROM email, rid;".format(useremail)
+            # conn.execute(query)
+            # conn.close()
+
+            # db = DBconnection.connecting()
+            # conn = db.connect()
+            # query = "WITH att AS (SELECT reservationid AS var FROM (SELECT * FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) as latest WHERE reservationid = latest.reservationid), restau AS (SELECT '{0}' AS var), tablenb AS (SELECT 2 AS var) INSERT INTO reservation_contains SELECT att.var, restau.var, tablenb.var FROM att, restau, tablenb;".format(licensenb)
+            # conn.execute(query)
+            # conn.close()
 
 
         # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage") 
+
+    # def validate(date_text):
+    #         try:
+    #             datetime.datetime.strptime(date_text, '%Y-%m-%d')
+    #         except:
+    #             raise ValueError("Incorrect data format, should be YYY-MM-DD")
 
