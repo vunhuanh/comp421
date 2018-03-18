@@ -52,15 +52,85 @@ class Reserve(tk.Frame):
             self.res = tk.Label(self, text=restau[i])
             self.res.grid(row=irow, column=1)  
             self.ures = tk.Button(self, text="Reserve")
-            self.ures.bind('<Button-1>', self.mkres)
+            print(licensenb[i])
+            self.ures.bind('<Button-1>', lambda event, arg=licensenb[i]: self.mkres(event, arg))
             self.ures.grid(row=irow, column=2)
 
             i += 1 
             irow += 1
 
-    def mkres(self, event):
-        print "MakeReservation"
+    def mkres(self, event, arg):
+        globalvar.lnb_reserve = arg
+        self.controller.show_frame("MakeReservation")
+        print(globalvar.lnb_reserve)
 
     # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage")
+
+# Frame for reserving table at a restaurant
+class MakeReservation(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.create_widgets()
+
+    def create_widgets(self):
+
+        self.grid_columnconfigure(0, minsize=150)
+        self.grid_columnconfigure(1, minsize =150)
+        self.grid_columnconfigure(2, minsize=150)
+        self.grid_rowconfigure(2, minsize=10)
+
+        self.hp_btn = tk.Button(self, text="Homepage")
+        self.hp_btn.bind('<Button-1>', self.homepage)
+        self.hp_btn.grid(row=0, column=0)
+
+        self.desc = tk.Label(self, text="Make a Reservation")
+        self.desc.grid(row=1, column=1)
+
+
+        self.submit = tk.Button(self, text="Submit reservation")
+        self.submit.bind('<Button-1>', self.submitReservation)
+        self.submit.grid(row=3, column=0)
+        self.time = tk.Label(self, text="Time")
+        self.time.grid(row=3, column=1)
+        self.date = tk.Label(self, text="Date")
+        self.date.grid(row=3, column=2)
+        self.qty = tk.Label(self, text="Number of diners")
+        self.qty.grid(row=3, column=3)
+        
+        self.time2 = tk.Entry(self, width=10)
+        self.time2.insert(0, "0")
+        self.time2.grid(row=4, column=1)
+
+        self.date2 = tk.Entry(self, width=10)
+        self.date2.insert(0, "0")
+        self.date2.grid(row=4, column=2)
+
+        self.quantity = tk.Entry(self, width=10)
+        self.quantity.insert(0, "0")
+        self.quantity.grid(row=4, column=3)
+       
+    def submitReservation(self,event):
+        db = DBconnection.connecting()
+        conn = db.connect()
+        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid"
+        result_set = conn.execute(query)
+        conn.close()
+
+        availableTables = []
+        for r in result_set:
+            availableTables.append(r[0])
+            availableTables.append(r[1])
+            availableTables.apped(r[2])
+
+
+
+        # Go to homepage
+    def homepage(self, event):
+        self.controller.show_frame("Homepage")
+
+
+
+
