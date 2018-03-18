@@ -4,6 +4,7 @@ import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
+from changeglobal import getGlobal, setGlobal 
 
 inp = None
 
@@ -107,24 +108,24 @@ class MakeReview(tk.Frame):
     def on_button(self):
         
         lines = self.text.get("1.0", tk.END).splitlines()
-        stringComment = ""
+        comment = ""
         for line in lines:
-            stringComment += line
-            stringComment += " "
+            comment += line
+            comment += " "
 
-        print stringComment
+        print comment
 
         # Get restaurant license number from session variable?? dynamic??
-        useremail = ''
-        licensenumber = "mgao8505"
+        useremail = getGlobal('useremail')
+        licensenb = getGlobal('licensenb')
+        date = getGlobal("date")
+        rating = 5
         
 
          # Connect to DB and select user's points
         db = DBconnection.connecting()
         conn = db.connect()
-        cursor = db.cursor()
-        query = "".format(licensenumber)
-        cursor.execute(query)
+        conn.execute('''INSERT into REVIEW (useremail, licensenb, comment, rating, reviewdate)''', (useremail, licensenb, comment, rating, date))
 
         db.commit()
         conn.close()
