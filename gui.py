@@ -20,6 +20,8 @@ from pickup import Pickup
 from pickup import R_menu
 from event import Event
 from review import Review
+from reviewoptions import AllReviews
+from reviewoptions import MakeReview
 
 
 # Main application container
@@ -36,7 +38,7 @@ class Application(tk.Tk):
 
         # Define frames
         self.frames = {}
-        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, Pickup, R_menu, Event, Cart, Review):
+        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, Pickup, R_menu, Event, Cart, Review, AllReviews, MakeReview):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame

@@ -24,3 +24,7 @@ def connecting():
     except:
         print("Connection Failed")
 
+
+if __name__ == "__main__":
+    connecting()
+
