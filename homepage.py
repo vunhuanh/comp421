@@ -22,7 +22,7 @@ class Homepage(tk.Frame):
         self.grid_columnconfigure(2, minsize=150)
         
         # Header
-            # Get user email from session variable
+        # Get user email from session variable
         useremail = "nhu.vu@mail.mcgill.ca"
         self.title = tk.Label(self, text="GOURMET")
         self.title.grid(row=1, column=1)
@@ -127,8 +127,6 @@ class Homepage(tk.Frame):
 
     # Review restaurant
     def review(self, event):
-        print "review"
         self.controller.show_frame("Review")
-
 
 
