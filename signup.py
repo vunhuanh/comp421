@@ -56,7 +56,7 @@ class Signup(tk.Frame):
         print self.givenbirthday
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "INSERT INTO users VALUES (\'{0}\', \'{1}', default, \'{2}\');".format(self.givenemail, self.givenpassword, self.givenbirthday);
+        query = "INSERT INTO users VALUES (\'{0}\', \'{1}\', default, \'{2}\');".format(self.givenemail, self.givenpassword, self.givenbirthday);
 
         
         try:

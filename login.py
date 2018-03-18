@@ -59,7 +59,8 @@ class Login(tk.Frame):
 
         if int(count[0]) == 1: 
             setGlobal('useremail', self.givenemail)
-            print self.givenpassword
+            self.emailbox.delete(0, tk.END)
+            self.passwordbox.delete(0, tk.END)
             self.controller.show_frame("Homepage")
             
         else:
