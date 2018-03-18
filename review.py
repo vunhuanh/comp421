@@ -4,6 +4,8 @@ import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
+import globalvar
+from changeglobal import getGlobal, setGlobal  
 
 # Frame for buying event tickets
 class Review(tk.Frame):
@@ -49,23 +51,28 @@ class Review(tk.Frame):
         i = 0
         for r in restau:
             self.res = tk.Label(self, text=restau[i])
-            self.res.grid(row=irow, column=0)  
+            self.res.grid(row=irow, column=0)
+
             self.allrev = tk.Button(self, text="See other users' reviews")
-            self.allrev.bind('<Button-1>', self.allreview)
+            self.allrev.bind('<Button-1>', lambda event, arg=licensenb[i]:self.allreview(event, arg))
             self.allrev.grid(row=irow, column=1)
             self.urev = tk.Button(self, text="Make a review")
-            self.urev.bind('<Button-1>', self.userreview)
+            self.urev.bind('<Button-1>', lambda event, arg=licensenb[i]:self.userreview(event, arg))
             self.urev.grid(row=irow, column=2)
             
             i += 1 
             irow += 1
 
+
     #See all reviews of other users
-    def allreview(self, event):
+    def allreview(self, event, arg):
+        setGlobal('lnb_review', arg)
         self.controller.show_frame("AllReviews")
+        
          
     #Make a new review for this restaurant
-    def userreview(self, event):
+    def userreview(self, event, arg):
+        setGlobal('lnb_review', arg)
         self.controller.show_frame("MakeReview")
 
     # Go to homepage
