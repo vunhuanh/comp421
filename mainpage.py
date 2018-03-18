@@ -43,6 +43,7 @@ class Mainpage(tk.Frame):
 
     # Signup
     def signup(self, event):
+        self.controller.show_frame("Signup")
         #cf. signup.py
         print "signup"
 
@@ -50,6 +51,7 @@ class Mainpage(tk.Frame):
     def login(self, event):
         #cf. login.py
         print "login"
+        self.controller.show_frame("Login")
         # Once logged in, display the homepage.py frame
 
     # Go to homepage

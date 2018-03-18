@@ -10,8 +10,7 @@ from sqlalchemy import Table, Column, String, MetaData
 import globalvar #file containing global variables - not sure if we should keep
     #either keep these as functions and just have textboxes right on the mainpage
     #or have separate signup/login pages
-import login
-import signup 
+from signup import Signup
 from mainpage import Mainpage
 from homepage import Homepage
 from cart import Cart
@@ -23,7 +22,7 @@ from pickup import Pickup
 from pickup import R_menu
 from event import Event
 from review import Review
-
+from login import Login
 
 # Main application container
 class Application(tk.Tk):
@@ -44,7 +43,7 @@ class Application(tk.Tk):
 
         # Define frames
         self.frames = {}
-        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, Pickup, R_menu, Event, Cart, Review):
+        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, Pickup, R_menu, Event, Cart, Review, Login, Signup):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
