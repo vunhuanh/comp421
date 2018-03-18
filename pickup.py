@@ -4,6 +4,7 @@ import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
+from changeglobal import getGlobal, setGlobal
 
 # Frame for making pickups
 class Pickup(tk.Frame):
@@ -56,7 +57,7 @@ class Pickup(tk.Frame):
 
     # Go to menu page
     def menu(self, event, arg):
-        globalvar.lnb_pickup = arg
+        setGlobal('lnb_pickup', arg)
         self.controller.show_frame("R_menu")
 
     # Go to homepage
@@ -87,7 +88,7 @@ class R_menu(tk.Frame):
         self.desc.grid(row=1, column=1)
         
         # Get queried restaurant licensenb
-        lnb_pickup = 'shaw7223'
+        lnb_pickup = getGlobal('lnb_pickup')
 
         # Connect to DB and get info
         db = DBconnection.connecting()
@@ -128,11 +129,11 @@ class R_menu(tk.Frame):
             irow += 1
 
     def add2cart(self, event):
-        print "add to cart"
+        
 
     # Get global variable
     def getlnb(self):
-        return globalvar.lnb_pickup
+        return getGlobal('lnb_pickup')
 
     # Go to homepage
     def homepage(self, event):

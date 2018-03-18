@@ -61,6 +61,15 @@ class AllReviews(tk.Frame):
         irow = 4
         i = 0
         for r in date:
+            if(self.date.winfo_exists()){
+                self.date.destroy()
+            }
+            if(self.rating.winfo_exists()){
+                self.rating.destroy()
+            }
+            if(self.comment.winfo_exists()){
+                self.comment.destroy()
+            }
             self.date = tk.Label(self, text=date[i])
             self.date.grid(row=irow, column=0)
             self.rating = tk.Label(self, text=rating[i])
