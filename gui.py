@@ -7,6 +7,8 @@ import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 
 # Other modules/functions
+import datetime
+from changeglobal import setTime
 from signup import Signup
 from mainpage import Mainpage
 from homepage import Homepage
@@ -22,6 +24,7 @@ from review import Review
 from login import Login
 from reviewoptions import AllReviews
 from reviewoptions import MakeReview
+
 
 # Main application container
 class Application(tk.Tk):
@@ -45,8 +48,10 @@ class Application(tk.Tk):
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
+        setTime()
         # Go to mainpage (before login)
         self.show_frame("Mainpage")
+
 
     # Show a frame for the given page name
     def show_frame(self, page_name):
