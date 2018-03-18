@@ -4,10 +4,11 @@ import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
+from changeglobal import getGlobal, setGlobal 
 
 inp = None
 
-# Frame for upcoming user reservations
+# Frame for displaying all reviews for a restaurant
 class AllReviews(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -26,16 +27,16 @@ class AllReviews(tk.Frame):
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
-        self.desc = tk.Label(self, text="You have upcoming reservations from the following restaurants:", wraplength=300)
+        self.desc = tk.Label(self, text="All reviews for this restaurant", wraplength=300)
         self.desc.grid(row=1, column=1)
 
-        # Get restaurant license number from session variable?? dynamic??
-        licensenumber = "mgao8505"
+        # Get restaurant license number from global variable
+        licensenb = getGlobal('lnb_review')
         
         # Connect to DB and select user's points
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT reviewdate, rating, comment FROM review WHERE licensenb='{0}';".format(licensenumber)
+        query = "SELECT reviewdate, rating, comment FROM review WHERE licensenb='{0}';".format(licensenb)
         result_set = conn.execute(query)  
         conn.close()
 
@@ -94,39 +95,45 @@ class MakeReview(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
 
-        self.intro = tk.Label(self, text="Write your comment here: ")
-        self.intro.grid(row=0, column=1)
+        self.rating = tk.Label(self, text="Please enter your rating here (from 1 to 5): ")
+        self.rating.grid(row=1, column=0)
+
+        self.entry = tk.Entry(self)
+        self.entry.grid(row=1, column=1)
+
+        self.intro = tk.Label(self, text="Plese write your comment here: ")
+        self.intro.grid(row=2, column=0)
         
-        self.text = tk.Text(self, borderwidth=3)
-        self.text.grid(row=1, column=1)
+        self.text = tk.Text(self, borderwidth=3, width=50, height=20)
+        self.text.grid(row=3, column=1)
         
         self.button = tk.Button(self, text="Submit comment", command=self.on_button)
-        self.button.grid(row=2, column=2)
+        self.button.grid(row=3, column=2)
 
 
     def on_button(self):
+
+        rating = self.entry.get()
         
         lines = self.text.get("1.0", tk.END).splitlines()
-        stringComment = ""
+        comment = ""
         for line in lines:
-            stringComment += line
-            stringComment += " "
+            comment += line
+            comment += " "
 
-        print stringComment
-
-        # Get restaurant license number from session variable?? dynamic??
-        useremail = ''
-        licensenumber = "mgao8505"
+        # Get restaurant license number from global variable
+        useremail = getGlobal('useremail')
+        licensenb = getGlobal('lnb_review')
+        date = getGlobal("date")
         
 
          # Connect to DB and select user's points
         db = DBconnection.connecting()
         conn = db.connect()
-        cursor = db.cursor()
-        query = "".format(licensenumber)
-        cursor.execute(query)
 
-        db.commit()
+        query = "INSERT INTO review VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\');".format(useremail, licensenb, comment, rating, date);
+        conn.execute(query)
+        
         conn.close()
             
             
