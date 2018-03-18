@@ -24,17 +24,9 @@ class Homepage(tk.Frame):
         self.grid_columnconfigure(2, minsize=150)
         
         # Header
-<<<<<<< HEAD
-
         #get the global variable from config.ini laterrr
         useremail = getGlobal('useremail')
 
-        
-=======
-        #get the global variable from config.ini laterrr
-        useremail = getGlobal('useremail')
-
->>>>>>> master
         self.title = tk.Label(self, text="GOURMET")
         self.title.grid(row=1, column=1)
         msg = "Welcome, "
@@ -87,7 +79,7 @@ class Homepage(tk.Frame):
 
     # Logout
     def logout(self, event):
-        setGlobal('useremail', 'None')
+        setGlobal('useremail', 'admin')
         self.controller.show_frame("Mainpage")
 
     def cart(self, event):
@@ -116,6 +108,7 @@ class Homepage(tk.Frame):
 
     # View upcoming reservations
     def u_resr(self, event):
+        
         self.controller.show_frame("UserResr")
 
     # View upcoming pickup orders
