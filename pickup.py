@@ -47,6 +47,7 @@ class Pickup(tk.Frame):
         for r in restau:
             self.vmenu = tk.Button(self, text="View menu")
             self.vmenu.bind('<Button-1>', lambda event, arg=licensenb[i]: self.menu(event, arg))
+            print "vmenu"
             self.vmenu.grid(row=irow, column=0)
 
             self.res = tk.Label(self, text=restau[i])
@@ -59,6 +60,7 @@ class Pickup(tk.Frame):
     def menu(self, event, arg):
         setGlobal('lnb_pickup', arg)
         self.controller.show_frame("R_menu")
+        print "menu"
 
     # Go to homepage
     def homepage(self, event):
@@ -89,6 +91,8 @@ class R_menu(tk.Frame):
 
         # Get queried restaurant licensenb
         lnb_pickup = getGlobal('lnb_pickup')
+
+        print "R_menu"
 
         # Connect to DB and get info
         db = DBconnection.connecting()
@@ -133,25 +137,19 @@ class R_menu(tk.Frame):
 
     def add2cart(self, event, arg1, arg2):
 
-        #create a new cart id if global cartid is NONE
-        temp = getGlobal(cartid)
+        print "add2cart"
+        #Connect to the db
+        db = DBconnection.connecting()
+        conn = db.connect()
 
-        if temp == NONE:
+        #create a new cart id
+        query = "INSERT INTO cart VALUES (default);";
+        conn.execute(query)
 
-            print "It is none"
-            #Connect to the db
-            db = DBconnection.connecting()
-            conn = db.connect()
-            query = "INSERT INTO cart VALUES (default);";
-            conn.execute(query)
-            query = "SELECT cartid FROM cart ORDER BY cartid DESC LIMIT 1;"
-            cartid = conn.execute(query)
-            for c in cartid:
-                realid = c[0]
-
-        else:
-            realid = getGlobal(cartid)
-
+        query = "SELECT cartid FROM cart ORDER BY cartid DESC LIMIT 1;"
+        cartid = conn.execute(query)
+        for c in cartid:
+            realid = c[0]
 
         print realid
 

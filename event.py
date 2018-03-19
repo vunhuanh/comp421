@@ -1,4 +1,4 @@
-import Tkinter as tk  
+import Tkinter as tk
 import psycopg2
 import sqlalchemy
 import pandas.io.sql as psql
@@ -24,10 +24,10 @@ class Event(tk.Frame):
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
         self.display_btn.grid(row=0, column=4)
-        
+
     # Display page contents
     def display(self, event):
-        
+
         # Header
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
@@ -40,7 +40,7 @@ class Event(tk.Frame):
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT DISTINCT licensenb, restaurantname, eventname, eventdate, eventprice FROM upcomingevents ORDER BY eventdate;"
-        result_set = conn.execute(query)  
+        result_set = conn.execute(query)
         conn.close()
 
         licensenb = []
@@ -74,7 +74,7 @@ class Event(tk.Frame):
         i = 0
         for r in restau:
             self.res = tk.Label(self, text=restau[i])
-            self.res.grid(row=irow, column=1)  
+            self.res.grid(row=irow, column=1)
             self.event = tk.Label(self, text=event[i])
             self.event.grid(row=irow, column=2)
             self.date = tk.Label(self, text=date[i])
@@ -84,14 +84,12 @@ class Event(tk.Frame):
             self.quantity = tk.Entry(self, width=10)
             self.quantity.insert(0, "0")
             self.quantity.grid(row=irow, column=5)
-            
-            i += 1 
+
+            i += 1
             irow += 1
 
     def add2cart(self, event):
         print "add to cart"
-
-        
 
     # Go to homepage
     def homepage(self, event):

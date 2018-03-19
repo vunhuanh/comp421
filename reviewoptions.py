@@ -62,11 +62,8 @@ class AllReviews(tk.Frame):
         i = 0
         for r in date:
             self.date.destroy()
-            print "1"
             self.rating.destroy()
-            print "2"
             self.comment.destroy()
-            print "3"
 
             self.date = tk.Label(self, text=date[i])
             self.date.grid(row=irow, column=0)
