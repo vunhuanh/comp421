@@ -25,7 +25,7 @@ class Reserve(tk.Frame):
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=4)
+        self.display_btn.grid(row=1, column=0)
         
     # Display page contents
     def display(self, event):
@@ -89,6 +89,14 @@ class MakeReservation(tk.Frame):
         self.grid_columnconfigure(1, minsize =150)
         self.grid_columnconfigure(2, minsize=150)
         self.grid_rowconfigure(2, minsize=10)
+
+        # Display
+        self.display_btn = tk.Button(self, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=1, column=0)
+        
+    # Display page contents
+    def display(self, event):
 
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)

@@ -20,6 +20,14 @@ class Pickup(tk.Frame):
         self.grid_columnconfigure(1, minsize=150)
         self.grid_columnconfigure(2, minsize=150)
         self.grid_rowconfigure(2, minsize=10)
+
+        # Display
+        self.display_btn = tk.Button(self, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=1, column=0)
+        
+    # Display page contents
+    def display(self, event):
         
         # Header
         self.hp_btn = tk.Button(self, text="Homepage")
@@ -78,6 +86,14 @@ class R_menu(tk.Frame):
         self.grid_columnconfigure(1, minsize=150)
         self.grid_columnconfigure(2, minsize=150)
         self.grid_rowconfigure(2, minsize=10)
+
+        # Display
+        self.display_btn = tk.Button(self, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=1, column=0)
+        
+    # Display page contents
+    def display(self, event):
         
         # Header
         self.hp_btn = tk.Button(self, text="Homepage")

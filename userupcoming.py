@@ -24,7 +24,7 @@ class UserResr(tk.Frame):
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=4)
+        self.display_btn.grid(row=1, column=0)
         
     # Display page contents
     def display(self, event):
@@ -91,7 +91,7 @@ class UserPickup(tk.Frame):
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=0)
+        self.display_btn.grid(row=1, column=0)
         
     # Display page contents
     def display(self, event):
@@ -148,7 +148,7 @@ class UserEvent(tk.Frame):
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=0)
+        self.display_btn.grid(row=1, column=0)
         
     # Display page contents
     def display(self, event):
