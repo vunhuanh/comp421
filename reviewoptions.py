@@ -1,4 +1,4 @@
-import Tkinter as tk  
+import Tkinter as tk
 import psycopg2
 import sqlalchemy
 import pandas.io.sql as psql
@@ -138,7 +138,7 @@ class MakeReview(tk.Frame):
         db = DBconnection.connecting()
         conn = db.connect()
 
-        query = "INSERT INTO review VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\');".format(useremail, licensenb, comment, rating, date);
+        query = "INSERT INTO review VALUES (r'{0}r', r'{1}r', r'{2}r', r'{3}r', r'{4}r');".format(useremail, licensenb, comment, rating, date)
         conn.execute(query)
 
         conn.close()

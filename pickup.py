@@ -133,12 +133,12 @@ class R_menu(tk.Frame):
 
     def add2cart(self, event, arg1, arg2):
 
-
-
         #create a new cart id if global cartid is NONE
-        if getGlobal(cartid) == NONE:
+        temp = getGlobal(cartid)
 
-            print "Tt is none"
+        if temp == NONE:
+
+            print "It is none"
             #Connect to the db
             db = DBconnection.connecting()
             conn = db.connect()
@@ -165,7 +165,7 @@ class R_menu(tk.Frame):
                 print "in"
                 print num
                 foodname = arg2[i]
-                query = "INSERT INTO pickup_order VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(realid, licensenb, foodname, num);
+                query = "INSERT INTO pickup_order VALUES (r'{0}r', r'{1}r', r'{2}r', r'{3}r')".format(realid, licensenb, foodname, num);
                 conn.execute(query)
                 i += 1
             else:
