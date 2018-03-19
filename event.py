@@ -91,6 +91,8 @@ class Event(tk.Frame):
     def add2cart(self, event):
         print "add to cart"
 
+        
+
     # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage")
