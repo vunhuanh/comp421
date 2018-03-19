@@ -1,14 +1,9 @@
 import Tkinter as tk
 
 class Scroll(tk.Frame):
-    """A pure Tkinter scrollable frame that actually works!
-    * Use the 'interior' attribute to place widgets inside the scrollable frame
-    * Construct and pack/place/grid normally
-    * This frame only allows vertical scrolling
-
-    """
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)            
+        tk.Frame.__init__(self, parent)     
+        self.controller = controller       
 
         # create a canvas object and a vertical scrollbar for scrolling it
         self.canvas = tk.Canvas(self, bd=0, highlightthickness=0)

@@ -13,13 +13,13 @@ class Review(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        self.grid_columnconfigure(0, minsize=150)
-        self.grid_columnconfigure(1, minsize=150)
-        self.grid_columnconfigure(2, minsize=150)
+        self.hp_btn = tk.Button(self, text="Homepage")
+        self.hp_btn.bind('<Button-1>', self.homepage)
+        self.hp_btn.grid(row=0, column=0)
 
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=4)
+        self.display_btn.grid(row=1, column=0)
 
         #create_widgets(self.interior)
 
@@ -36,7 +36,7 @@ class Review(tk.Frame):
     #     self.display_btn.grid(row=0, column=4)
 
     def resize(self, event):
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=785, height=500)
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=985, height=500)
         
     # Display page contents
     def display(self, event):
@@ -57,18 +57,13 @@ class Review(tk.Frame):
         self.interior.grid_columnconfigure(1, minsize=150)
         self.interior.grid_columnconfigure(2, minsize=150)
 
-        # self.display_btn = tk.Button(self.interior, text="Display")
-        # self.display_btn.bind('<Button-1>', self.display)
-        # self.display_btn.grid(row=0, column=4)
-
-        rows = 100
-        for i in range(1,rows):
-            self.interior.grid_rowconfigure(i, minsize=10)
-
-        # Header
         self.hp_btn = tk.Button(self.interior, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
+
+        self.display_btn = tk.Button(self.interior, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=1, column=0)
 
         # Connect to DB and get info
         db = DBconnection.connecting()
