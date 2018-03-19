@@ -22,14 +22,6 @@ class AllReviews(tk.Frame):
         self.grid_columnconfigure(1, minsize=150)
         self.grid_columnconfigure(2, minsize=150)
         self.grid_rowconfigure(2, minsize=10)
-
-        # Display
-        self.display_btn = tk.Button(self, text="Display")
-        self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=4)
-        
-    # Display page contents
-    def display(self, event):
         
         # Header
         self.hp_btn = tk.Button(self, text="Homepage")
@@ -69,15 +61,13 @@ class AllReviews(tk.Frame):
         irow = 4
         i = 0
         for r in date:
-            if(self.date.winfo_exists()){
-                self.date.destroy()
-            }
-            if(self.rating.winfo_exists()){
-                self.rating.destroy()
-            }
-            if(self.comment.winfo_exists()){
-                self.comment.destroy()
-            }
+            self.date.destroy()
+            print "1"
+            self.rating.destroy()
+            print "2"
+            self.comment.destroy()
+            print "3"
+            
             self.date = tk.Label(self, text=date[i])
             self.date.grid(row=irow, column=0)
             self.rating = tk.Label(self, text=rating[i])
