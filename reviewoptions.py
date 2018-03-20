@@ -1,10 +1,10 @@
-import Tkinter as tk  
+import Tkinter as tk
 import psycopg2
 import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
-from changeglobal import getGlobal, setGlobal 
+from changeglobal import getGlobal, setGlobal
 
 inp = None
 
@@ -27,10 +27,10 @@ class AllReviews(tk.Frame):
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
         self.display_btn.grid(row=1, column=0)
-        
+
     # Display page contents
     def display(self, event):
-        
+
         # Header
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
@@ -40,12 +40,12 @@ class AllReviews(tk.Frame):
 
         # Get restaurant license number from global variable
         licensenb = getGlobal('lnb_review')
-        
+
         # Connect to DB and select user's points
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT reviewdate, rating, comment FROM review WHERE licensenb='{0}';".format(licensenb)
-        result_set = conn.execute(query)  
+        result_set = conn.execute(query)
         conn.close()
 
         #Putting all data from review table to arrays date, rating and comment
@@ -70,12 +70,9 @@ class AllReviews(tk.Frame):
         i = 0
         for r in date:
             self.date.destroy()
-            print "1"
             self.rating.destroy()
-            print "2"
             self.comment.destroy()
-            print "3"
-            
+
             self.date = tk.Label(self, text=date[i])
             self.date.grid(row=irow, column=0)
             self.rating = tk.Label(self, text=rating[i])
@@ -104,7 +101,7 @@ class MakeReview(tk.Frame):
         self.grid_columnconfigure(1, minsize=150)
         self.grid_columnconfigure(2, minsize=150)
         self.grid_rowconfigure(2, minsize=10)
-        
+
         # Header
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
@@ -118,10 +115,10 @@ class MakeReview(tk.Frame):
 
         self.intro = tk.Label(self, text="Plese write your comment here: ")
         self.intro.grid(row=2, column=0)
-        
+
         self.text = tk.Text(self, borderwidth=3, width=50, height=20)
         self.text.grid(row=3, column=1)
-        
+
         self.button = tk.Button(self, text="Submit comment", command=self.on_button)
         self.button.grid(row=3, column=2)
 
@@ -129,7 +126,7 @@ class MakeReview(tk.Frame):
     def on_button(self):
 
         rating = self.entry.get()
-        
+
         lines = self.text.get("1.0", tk.END).splitlines()
         comment = ""
         for line in lines:
@@ -140,22 +137,20 @@ class MakeReview(tk.Frame):
         useremail = getGlobal('useremail')
         licensenb = getGlobal('lnb_review')
         date = getGlobal("date")
-        
+
 
          # Connect to DB and select user's points
         db = DBconnection.connecting()
         conn = db.connect()
 
-        query = "INSERT INTO review VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\');".format(useremail, licensenb, comment, rating, date);
+        query = "INSERT INTO review VALUES (r'{0}r', r'{1}r', r'{2}r', r'{3}r', r'{4}r');".format(useremail, licensenb, comment, rating, date)
         conn.execute(query)
-        
+
         conn.close()
-            
-            
-        
+
+
+
 
     #Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage")
-        
-    

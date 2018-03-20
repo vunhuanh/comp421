@@ -50,6 +50,7 @@ class Application(tk.Tk):
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
+
         setTime()
         # Go to mainpage (before login)
         self.show_frame("Mainpage")
@@ -59,7 +60,6 @@ class Application(tk.Tk):
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         frame.tkraise()
-        
 
 # Start application
 if __name__ == "__main__":
