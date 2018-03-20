@@ -136,7 +136,7 @@ class R_menu(tk.Frame):
         cartid_global = getGlobal('cartid')
 
         if cartid_global == 'None':
-            print "Is None"
+
             #Connect to the db
             db = DBconnection.connecting()
             conn = db.connect()
@@ -154,7 +154,6 @@ class R_menu(tk.Frame):
         else:
             realid = cartid_global
 
-        print realid
 
         #insert new records into pickup_order
         i = 0
