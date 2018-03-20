@@ -26,6 +26,8 @@ from login import Login
 from reviewoptions import AllReviews
 from reviewoptions import MakeReview
 from scrolltest import Scroll
+from cart import Cart
+from cart import Empty_Cart
 
 
 # Main application container
@@ -43,7 +45,7 @@ class Application(tk.Tk):
         # Define frames
         self.frames = {}
 
-        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, MakeReservation, Pickup, R_menu, Event, Cart, Review, Login, Signup, AllReviews, MakeReview, Scroll):
+        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, MakeReservation, Pickup, R_menu, Event, Cart, Review, Login, Signup, AllReviews, MakeReview, Scroll, Cart):
 
             page_name = F.__name__
             frame = F(parent=container, controller=self)

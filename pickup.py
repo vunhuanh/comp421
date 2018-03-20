@@ -127,9 +127,9 @@ class R_menu(tk.Frame):
             self.quantity.insert(0, "0")
             self.quantity.grid(row=irow, column=3)
             quantities.append(self.quantity)
-
             i += 1
             irow += 1
+    
     #arg1=quantities, arg2=food, arg3=price
     def add2cart(self, event, arg1, arg2, arg3):
         #If the cart is new and cartid is not yet set
@@ -148,7 +148,6 @@ class R_menu(tk.Frame):
             cartid = conn.execute(query)
             for c in cartid:
                 realid = c[0]
-
             conn.close()
 
         else:
@@ -157,9 +156,9 @@ class R_menu(tk.Frame):
 
         #insert new records into pickup_order
         i = 0
+        invalid_count = 0
         pickup_price = float(getGlobal('pickup_price'))
         licensenb = getGlobal('lnb_pickup')
-
         #Connect to the db
         db = DBconnection.connecting()
         conn = db.connect()
@@ -176,11 +175,21 @@ class R_menu(tk.Frame):
                 i += 1
             else:
                 i += 1
+                invalid_count += 1
                 continue
 
         conn.close()
+
+        #When all the quantities user entered are invalid
+        #if invalid_count == i:
+        #    self.controller.show_frame("Invalid")
+
+
         setGlobal('cartid', str(realid))
         setGlobal('pickup_price', str(pickup_price))
+
+        #Show the cart window
+        self.controller.show_frame("Cart")
 
 
     # Get global variable
