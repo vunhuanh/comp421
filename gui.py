@@ -25,6 +25,7 @@ from review import Review
 from login import Login
 from reviewoptions import AllReviews
 from reviewoptions import MakeReview
+from scrolltest import Scroll
 
 
 # Main application container
@@ -35,14 +36,14 @@ class Application(tk.Tk):
         self.winfo_toplevel().title("Gourmet")
 
         # Container for frames
-        self.geometry("800x500")
+        self.geometry("1000x500")
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
 
         # Define frames
         self.frames = {}
 
-        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, MakeReservation, Pickup, R_menu, Event, Cart, Review, Login, Signup, AllReviews, MakeReview):
+        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, MakeReservation, Pickup, R_menu, Event, Cart, Review, Login, Signup, AllReviews, MakeReview, Scroll):
 
             page_name = F.__name__
             frame = F(parent=container, controller=self)
@@ -59,11 +60,6 @@ class Application(tk.Tk):
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         frame.tkraise()
-
-
-
-
-
 
 # Start application
 if __name__ == "__main__":

@@ -23,7 +23,7 @@ class Event(tk.Frame):
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=4)
+        self.display_btn.grid(row=1, column=0)
 
     # Display page contents
     def display(self, event):
@@ -48,6 +48,7 @@ class Event(tk.Frame):
         event = []
         date = []
         price = []
+        attendees = []
         for r in result_set:
             licensenb.append(r[0])
             restau.append(r[1])
@@ -57,7 +58,7 @@ class Event(tk.Frame):
 
         # Print relevant info
         self.cart = tk.Button(self, text="Add to cart")
-        self.cart.bind('<Button-1>', self.add2cart)
+        self.cart.bind('<Button-1>', lambda event, arg1=attendees, arg2=event, arg3=date, arg4=price:self.add2cart(event, arg1, arg2, arg3, arg4))
         self.cart.grid(row=3, column=0)
         self.name = tk.Label(self, text="Restaurant")
         self.name.grid(row=3, column=1)
@@ -69,6 +70,7 @@ class Event(tk.Frame):
         self.price.grid(row=3, column=4)
         self.quantity = tk.Label(self, text="Quantity")
         self.quantity.grid(row=3, column=5)
+        attendees.append(self.quantity)
 
         irow = 4
         i = 0
@@ -88,8 +90,57 @@ class Event(tk.Frame):
             i += 1
             irow += 1
 
-    def add2cart(self, event):
-        print "add to cart"
+    def add2cart(self, event, arg1, arg2, arg3, arg4):
+        #arg1=attendees, arg2=event, arg3=date, arg4=price
+
+
+        if getGlobal('cartid') == None:
+            #Connect to the db
+            db = DBconnection.connecting()
+            conn = db.connect()
+
+            #create a new cart id
+            query = "INSERT INTO cart VALUES (default);";
+            conn.execute(query)
+            query = "SELECT cartid FROM cart ORDER BY cartid DESC LIMIT 1;"
+            cartid = conn.execute(query)
+            for c in cartid:
+                realid = c[0]
+
+            conn.close()
+
+        else:
+            realid = getGlobal('cartid')
+
+        print realid
+
+        #insert new records into pickup_order
+        i = 0
+        event_price = float(getGlobal('event_price'))
+        licensenb = getGlobal('lnb_event')
+
+        #Connect to the db
+        db = DBconnection.connecting()
+        conn = db.connect()
+
+        for entry in arg1:
+            num = entry.get()
+            if int(num) > 0:
+
+                event = arg2[i]
+                date = arg3[i]
+                price = arg4[i]
+                event_price += float(num) * price
+                query = "INSERT INTO event_order VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(realid, licensenb, event, date, num);
+                conn.execute(query)
+                i += 1
+            else:
+                i += 1
+                continue
+
+        conn.close()
+        setGlobal('cartid', realid)
+        setGlobal('event_price', event_price)
 
     # Go to homepage
     def homepage(self, event):

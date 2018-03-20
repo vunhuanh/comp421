@@ -24,8 +24,8 @@ class UserResr(tk.Frame):
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=4)
-        
+        self.display_btn.grid(row=1, column=0)
+
     # Display page contents
     def display(self, event):
         # Header
@@ -42,7 +42,7 @@ class UserResr(tk.Frame):
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT restaurantname, r.time FROM (SELECT * FROM user_books WHERE useremail = '{0}') as u JOIN (SELECT * FROM reservation WHERE time > now()) as r ON u.reservationid = r.reservationid JOIN (SELECT * FROM reservation_contains) as rc ON r.reservationid = rc.reservationid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON rc.licenseNB = res.licenseNB ORDER BY r.time;".format(useremail)
-        result_set = conn.execute(query)  
+        result_set = conn.execute(query)
         conn.close()
 
         restau = []
@@ -50,7 +50,7 @@ class UserResr(tk.Frame):
         for r in result_set:
             restau.append(r[0])
             time.append(r[1])
-        
+
         # Print relevant info
         self.name = tk.Label(self, text="Restaurant")
         self.name.grid(row=3, column=1)
@@ -61,10 +61,10 @@ class UserResr(tk.Frame):
         i = 0
         for r in restau:
             self.res = tk.Label(self, text=restau[i])
-            self.res.grid(row=irow, column=1)  
+            self.res.grid(row=irow, column=1)
             self.time = tk.Label(self, text=time[i])
-            self.time.grid(row=irow, column=2)  
-            i += 1 
+            self.time.grid(row=irow, column=2)
+            i += 1
             irow += 1
 
 
@@ -87,12 +87,12 @@ class UserPickup(tk.Frame):
         self.grid_columnconfigure(1, minsize=150)
         self.grid_columnconfigure(2, minsize=150)
         self.grid_rowconfigure(2, minsize=10)
-        
+
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=0)
-        
+        self.display_btn.grid(row=1, column=0)
+
     # Display page contents
     def display(self, event):
         # Header
@@ -110,20 +110,20 @@ class UserPickup(tk.Frame):
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT restaurantname FROM (SELECT * FROM transaction WHERE useremail = '{0}' AND transactiondate = current_date) as t JOIN (SELECT * FROM pickup_order) as p ON t.cartid = p.cartid JOIN  (SELECT licenseNB, restaurantname FROM restaurant) as res ON p.licenseNB = res.licenseNB;".format(useremail)
-        result_set = conn.execute(query)  
+        result_set = conn.execute(query)
         conn.close()
 
         restau = []
         for r in result_set:
             restau.append(r[0])
-        
+
         # Print relevant info
         irow = 3
         i = 0
         for r in restau:
             self.resr = tk.Label(self, text=restau[i])
-            self.resr.grid(row=irow, column=1)  
-            i += 1 
+            self.resr.grid(row=irow, column=1)
+            i += 1
             irow += 1
 
     # Go to homepage
@@ -148,11 +148,11 @@ class UserEvent(tk.Frame):
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=0)
-        
+        self.display_btn.grid(row=1, column=0)
+
     # Display page contents
     def display(self, event):
-        
+
         # Header
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
@@ -168,7 +168,7 @@ class UserEvent(tk.Frame):
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT restaurantname, eventname, eventdate FROM (SELECT * FROM transaction WHERE useremail = '{0}') as t JOIN (SELECT * FROM event_order WHERE eventdate > now()) as e ON t.cartid = e.cartid JOIN (SELECT licenseNB, restaurantname FROM restaurant) as res ON e.licenseNB = res.licenseNB ORDER BY eventdate;".format(useremail)
-        result_set = conn.execute(query)  
+        result_set = conn.execute(query)
         conn.close()
 
         restau = []
@@ -178,7 +178,7 @@ class UserEvent(tk.Frame):
             restau.append(r[0])
             event.append(r[1])
             date.append(r[2])
-        
+
         # Print relevant info
         self.name = tk.Label(self, text="Restaurant")
         self.name.grid(row=3, column=0)
@@ -191,16 +191,14 @@ class UserEvent(tk.Frame):
         i = 0
         for r in restau:
             self.res = tk.Label(self, text=restau[i])
-            self.res.grid(row=irow, column=0) 
+            self.res.grid(row=irow, column=0)
             self.event = tk.Label(self, text=event[i])
             self.event.grid(row=irow, column=1)
             self.time = tk.Label(self, text=date[i])
-            self.time.grid(row=irow, column=2)   
-            i += 1 
+            self.time.grid(row=irow, column=2)
+            i += 1
             irow += 1
 
     # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage")
-
-

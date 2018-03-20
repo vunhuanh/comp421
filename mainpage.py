@@ -41,18 +41,21 @@ class Mainpage(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=4, column=1)
 
+        self.hp_btn = tk.Button(self, text="Scroll")
+        self.hp_btn.bind('<Button-1>', self.scroll)
+        self.hp_btn.grid(row=5, column=1)
+
+    # Signup
+    def scroll(self, event):
+        self.controller.show_frame("Scroll")
+
     # Signup
     def signup(self, event):
         self.controller.show_frame("Signup")
-        #cf. signup.py
-        print "signup"
 
     # Login
     def login(self, event):
-        #cf. login.py
-        print "login"
         self.controller.show_frame("Login")
-        # Once logged in, display the homepage.py frame
 
     # Go to homepage
     def homepage(self, event):

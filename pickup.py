@@ -47,7 +47,6 @@ class Pickup(tk.Frame):
         for r in restau:
             self.vmenu = tk.Button(self, text="View menu")
             self.vmenu.bind('<Button-1>', lambda event, arg=licensenb[i]: self.menu(event, arg))
-            print "vmenu"
             self.vmenu.grid(row=irow, column=0)
 
             self.res = tk.Label(self, text=restau[i])
@@ -60,7 +59,6 @@ class Pickup(tk.Frame):
     def menu(self, event, arg):
         setGlobal('lnb_pickup', arg)
         self.controller.show_frame("R_menu")
-        print "menu"
 
     # Go to homepage
     def homepage(self, event):
@@ -92,8 +90,6 @@ class R_menu(tk.Frame):
         # Get queried restaurant licensenb
         lnb_pickup = getGlobal('lnb_pickup')
 
-        print "R_menu"
-
         # Connect to DB and get info
         db = DBconnection.connecting()
         conn = db.connect()
@@ -110,7 +106,7 @@ class R_menu(tk.Frame):
 
         # Print relevant info
         self.cart = tk.Button(self, text="Add to cart", )
-        self.cart.bind('<Button-1>', lambda event, arg1=quantities, arg2=food:self.add2cart(event, arg1, arg2))
+        self.cart.bind('<Button-1>', lambda event, arg1=quantities, arg2=food, arg3=price:self.add2cart(event, arg1, arg2, arg3))
         self.cart.grid(row=3, column=0)
         self.fd = tk.Label(self, text="Food")
         self.fd.grid(row=3, column=1)
@@ -134,36 +130,49 @@ class R_menu(tk.Frame):
 
             i += 1
             irow += 1
+    #arg1=quantities, arg2=food, arg3=price
+    def add2cart(self, event, arg1, arg2, arg3):
+        #If the cart is new and cartid is not yet set
+        cartid_global = getGlobal('cartid')
 
-    def add2cart(self, event, arg1, arg2):
+        if cartid_global == 'None':
+            print "Is None"
+            #Connect to the db
+            db = DBconnection.connecting()
+            conn = db.connect()
 
-        print "add2cart"
-        #Connect to the db
-        db = DBconnection.connecting()
-        conn = db.connect()
+            #create a new cart id
+            query = "INSERT INTO cart VALUES (default);";
+            conn.execute(query)
+            query = "SELECT cartid FROM cart ORDER BY cartid DESC LIMIT 1;"
+            cartid = conn.execute(query)
+            for c in cartid:
+                realid = c[0]
 
-        #create a new cart id
-        query = "INSERT INTO cart VALUES (default);";
-        conn.execute(query)
+            conn.close()
 
-        query = "SELECT cartid FROM cart ORDER BY cartid DESC LIMIT 1;"
-        cartid = conn.execute(query)
-        for c in cartid:
-            realid = c[0]
+        else:
+            realid = cartid_global
 
         print realid
 
         #insert new records into pickup_order
-        i=0
+        i = 0
+        pickup_price = float(getGlobal('pickup_price'))
         licensenb = getGlobal('lnb_pickup')
+
+        #Connect to the db
+        db = DBconnection.connecting()
+        conn = db.connect()
 
         for entry in arg1:
             num = entry.get()
             if int(num) > 0:
-                print "in"
-                print num
+
                 foodname = arg2[i]
-                query = "INSERT INTO pickup_order VALUES (r'{0}r', r'{1}r', r'{2}r', r'{3}r')".format(realid, licensenb, foodname, num);
+                price = arg3[i]
+                pickup_price += float(num) * price
+                query = "INSERT INTO pickup_order VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(realid, licensenb, foodname, num);
                 conn.execute(query)
                 i += 1
             else:
@@ -171,6 +180,8 @@ class R_menu(tk.Frame):
                 continue
 
         conn.close()
+        setGlobal('cartid', str(realid))
+        setGlobal('pickup_price', str(pickup_price))
 
 
     # Get global variable
