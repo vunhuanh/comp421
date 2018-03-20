@@ -41,7 +41,7 @@ class Mainpage(tk.Frame):
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=4, column=1)
 
-        self.hp_btn = tk.Button(self, text="Scroll")
+        self.hp_btn = tk.Button(self, text="Scrollbar prototype done, see review.py")
         self.hp_btn.bind('<Button-1>', self.scroll)
         self.hp_btn.grid(row=5, column=1)
 
