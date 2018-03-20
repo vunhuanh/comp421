@@ -4,6 +4,7 @@ import sqlalchemy
 import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
+from changeglobal import getGlobal, setGlobal
 
 # Frame for buying event tickets
 class Event(tk.Frame):
@@ -58,7 +59,7 @@ class Event(tk.Frame):
 
         # Print relevant info
         self.cart = tk.Button(self, text="Add to cart")
-        self.cart.bind('<Button-1>', lambda event, arg1=attendees, arg2=event, arg3=date, arg4=price:self.add2cart(event, arg1, arg2, arg3, arg4))
+        self.cart.bind('<Button-1>', lambda event, arg1=attendees, arg2=licensenb, arg3=event, arg4=date, arg5=price:self.add2cart(event, arg1, arg2, arg3, arg4, arg5))
         self.cart.grid(row=3, column=0)
         self.name = tk.Label(self, text="Restaurant")
         self.name.grid(row=3, column=1)
@@ -70,7 +71,6 @@ class Event(tk.Frame):
         self.price.grid(row=3, column=4)
         self.quantity = tk.Label(self, text="Quantity")
         self.quantity.grid(row=3, column=5)
-        attendees.append(self.quantity)
 
         irow = 4
         i = 0
@@ -86,15 +86,15 @@ class Event(tk.Frame):
             self.quantity = tk.Entry(self, width=10)
             self.quantity.insert(0, "0")
             self.quantity.grid(row=irow, column=5)
+            attendees.append(self.quantity)
 
             i += 1
             irow += 1
 
-    def add2cart(self, event, arg1, arg2, arg3, arg4):
-        #arg1=attendees, arg2=event, arg3=date, arg4=price
-
-
-        if getGlobal('cartid') == None:
+    def add2cart(self, event, arg1, arg2, arg3, arg4, arg5):
+        #arg1=attendees, arg2=licensenb, arg3=event, arg4=date, arg5=price
+        cartid_global = getGlobal('cartid')
+        if cartid_global == 'None':
             #Connect to the db
             db = DBconnection.connecting()
             conn = db.connect()
@@ -110,14 +110,12 @@ class Event(tk.Frame):
             conn.close()
 
         else:
-            realid = getGlobal('cartid')
+            realid = cartid_global
 
-        print realid
 
         #insert new records into pickup_order
         i = 0
         event_price = float(getGlobal('event_price'))
-        licensenb = getGlobal('lnb_event')
 
         #Connect to the db
         db = DBconnection.connecting()
@@ -127,11 +125,12 @@ class Event(tk.Frame):
             num = entry.get()
             if int(num) > 0:
 
-                event = arg2[i]
-                date = arg3[i]
-                price = arg4[i]
+                licensenb = arg2[i]
+                event = arg3[i]
+                date = arg4[i]
+                price = arg5[i]
                 event_price += float(num) * price
-                query = "INSERT INTO event_order VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(realid, licensenb, event, date, num);
+                query = "INSERT INTO event_order VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\')".format(realid, licensenb, event, date, num);
                 conn.execute(query)
                 i += 1
             else:
@@ -139,8 +138,8 @@ class Event(tk.Frame):
                 continue
 
         conn.close()
-        setGlobal('cartid', realid)
-        setGlobal('event_price', event_price)
+        setGlobal('cartid', str(realid))
+        setGlobal('event_price', str(event_price))
 
     # Go to homepage
     def homepage(self, event):
