@@ -71,21 +71,61 @@ class R_menu(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        self.create_widgets()
 
-    def create_widgets(self):
-        # Set min width to columns
-        self.grid_columnconfigure(0, minsize=150)
-        self.grid_columnconfigure(1, minsize=150)
-        self.grid_columnconfigure(2, minsize=150)
-        self.grid_rowconfigure(2, minsize=10)
-
-        # Header
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
 
-        self.desc = tk.Label(self, text="Menu")
+        self.display_btn = tk.Button(self, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=1, column=0)
+
+        #create_widgets(self.interior)
+
+    # def create_widgets(self):
+    #     Set min width to columns
+    #     self.grid_columnconfigure(0, minsize=150)
+    #     self.grid_columnconfigure(1, minsize=150)
+    #     self.grid_columnconfigure(2, minsize=150)
+    #     self.grid_rowconfigure(2, minsize=10)
+
+    #     # Display
+    #     self.display_btn = tk.Button(self, text="Display")
+    #     self.display_btn.bind('<Button-1>', display(self.interior))
+    #     self.display_btn.grid(row=0, column=4)
+
+    def resize(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=985, height=500)
+        
+    # Display page contents
+    def display(self, event):
+
+        self.canvas = tk.Canvas(self, bd=0, highlightthickness=0)
+        self.canvas.grid(row=0, column=0)
+
+        self.vsbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.vsbar.grid(row=0, column=1, sticky='ns')
+        self.canvas.configure(yscrollcommand=self.vsbar.set)
+
+        # create a frame inside the canvas which will be scrolled with it
+        self.interior = tk.Frame(self.canvas)
+        self.canvas.create_window((0,0), window=self.interior, anchor='nw')
+
+        self.interior.bind("<Configure>", self.resize)
+        self.interior.grid_columnconfigure(0, minsize=150)
+        self.interior.grid_columnconfigure(1, minsize=150)
+        self.interior.grid_columnconfigure(2, minsize=150)
+
+        # Header
+        self.hp_btn = tk.Button(self.interior, text="Homepage")
+        self.hp_btn.bind('<Button-1>', self.homepage)
+        self.hp_btn.grid(row=0, column=0)
+
+        self.display_btn = tk.Button(self.interior, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=1, column=0)
+
+        self.desc = tk.Label(self.interior, text="Menu")
         self.desc.grid(row=1, column=1)
 
         # Get queried restaurant licensenb
@@ -106,25 +146,25 @@ class R_menu(tk.Frame):
             price.append(r[1])
 
         # Print relevant info
-        self.cart = tk.Button(self, text="Add to cart", )
+        self.cart = tk.Button(self.interior, text="Add to cart", )
         self.cart.bind('<Button-1>', lambda event, arg1=quantities, arg2=food, arg3=price:self.add2cart(event, arg1, arg2, arg3))
         self.cart.grid(row=3, column=0)
-        self.fd = tk.Label(self, text="Food")
+        self.fd = tk.Label(self.interior, text="Food")
         self.fd.grid(row=3, column=1)
-        self.pc = tk.Label(self, text="Price")
+        self.pc = tk.Label(self.interior, text="Price")
         self.pc.grid(row=3, column=2)
-        self.qty = tk.Label(self, text="Quantity")
+        self.qty = tk.Label(self.interior, text="Quantity")
         self.qty.grid(row=3, column=3)
 
         irow = 4
         i = 0
 
         for r in food:
-            self.food = tk.Label(self, text=food[i])
+            self.food = tk.Label(self.interior, text=food[i])
             self.food.grid(row=irow, column=1)
-            self.price = tk.Label(self, text=price[i])
+            self.price = tk.Label(self.interior, text=price[i])
             self.price.grid(row=irow, column=2)
-            self.quantity = tk.Entry(self, width=10)
+            self.quantity = tk.Entry(self.interior, width=10)
             self.quantity.insert(0, "0")
             self.quantity.grid(row=irow, column=3)
             quantities.append(self.quantity)
