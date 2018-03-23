@@ -37,6 +37,11 @@ class Cart(tk.Frame):
         self.desc = tk.Label(self, text="Current items in your cart")
         self.desc.grid(row=1, column=1)
 
+        # Checkout
+        self.hp_btn = tk.Button(self, text="Checkout")
+        self.hp_btn.bind('<Button-1>', self.checkout)
+        self.hp_btn.grid(row=2, column=0)
+
         cartid_global = getGlobal('cartid')
         current_date = getGlobal('date')
 
@@ -133,7 +138,7 @@ class Cart(tk.Frame):
             conn.close()
 
             # Display cart contents
-            irow = 4
+            irow = int(getGlobal('irow'))
             i = 0
             for r in itemname:
                 self.ordertype = tk.Label(self, text=ordertype[i])
@@ -151,10 +156,8 @@ class Cart(tk.Frame):
                 i += 1
                 irow += 1
 
-        # Checkout
-        self.hp_btn = tk.Button(self, text="Checkout")
-        self.hp_btn.bind('<Button-1>', self.checkout)
-        self.hp_btn.grid(row=irow+2, column=0)
+            setGlobal('irow', str(irow))
+
 
     # Checkout and make transaction
     def checkout(self, event):
