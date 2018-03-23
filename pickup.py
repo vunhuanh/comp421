@@ -5,6 +5,7 @@ import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 from changeglobal import getGlobal, setGlobal
+import tkMessageBox
 
 # Frame for making pickups
 class Pickup(tk.Frame):
@@ -129,7 +130,7 @@ class R_menu(tk.Frame):
             quantities.append(self.quantity)
             i += 1
             irow += 1
-    
+
     #arg1=quantities, arg2=food, arg3=price
     def add2cart(self, event, arg1, arg2, arg3):
         #If the cart is new and cartid is not yet set
@@ -181,8 +182,8 @@ class R_menu(tk.Frame):
         conn.close()
 
         #When all the quantities user entered are invalid
-        #if invalid_count == i:
-        #    self.controller.show_frame("Invalid")
+        if invalid_count == i:
+            tkMessageBox.showerror("error","You did not select anything. Please check your selections again.")
 
 
         setGlobal('cartid', str(realid))
