@@ -227,9 +227,9 @@ class Paid(tk.Frame):
         self.payment_complete = tk.Label(self, text="Payment completed! Thank you so much!.")
         self.payment_complete.grid(row=1, column=1)
 
-        total_price = getGlobal('pickup_price') + getGlobal('event_price')
-        setGlobal('total_price', total_price)
-        self.total_price = tk.Label(self, text="Your made a payment of $"+total_price+".")
+        total_price = float(getGlobal('pickup_price')) + float(getGlobal('event_price'))
+        setGlobal('total_price', str(total_price))
+        self.total_price = tk.Label(self, text="Your made a payment of $"+str(total_price)+".")
         self.total_price.grid(row=2, column=1)
         setGlobal('cartid', 'None')
 
