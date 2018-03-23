@@ -57,6 +57,8 @@ class Review(tk.Frame):
         self.interior.grid_columnconfigure(1, minsize=150)
         self.interior.grid_columnconfigure(2, minsize=150)
 
+
+        # Header
         self.hp_btn = tk.Button(self.interior, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
