@@ -6,6 +6,7 @@ import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 from changeglobal import setGlobal, getGlobal
 import datetime
+import tkMessageBox
 
 # Frame for buying event tickets
 class Reserve(tk.Frame):
@@ -166,6 +167,7 @@ class MakeReservation(tk.Frame):
 
         licensenb = getGlobal('lnb_reserve')
         useremail = getGlobal('useremail')
+        date = getGlobal('date')
 
         db = DBconnection.connecting()
         conn = db.connect()
@@ -197,31 +199,28 @@ class MakeReservation(tk.Frame):
         for r2 in result_set2:
             licenseNB2.append(r2[0])
 
-        #FOR TESTING PURPOSES, CHECKING IF TABLES SORTED BY TABLE ID NUMBER
-        # print("BREAK///")
-
-        # print(tables)
-        # print(capty)
 
         #get total seats available across all tables
         total_seats = 0
         for c in capty:
             total_seats+=c
 
-        print("total seats avail: ")
-        print(total_seats)
+        # print("total seats avail: ")
+        # print(total_seats)
 
-        print("total quant input: " + self.u_quantity)
+        # print("total quant input: " + self.u_quantity)
 
         timestamp = self.u_date + " " + self.u_time
 
         if(int(self.u_quantity) > total_seats):
-            print("There aren't enough seats to accomodate the number of diners mentioned.")
-            print("Reservation failed")
+            tkMessageBox.showerror("error","There aren't enough seats to accomodate the number of diners mentioned. Reservation failed.")
 
         #Checking if time input falls between opening hours and closing hours for the restaurant
         elif(not licenseNB2):
-            print("Nope, not happening.")
+            tkMessageBox.showerror("error","Invalid time provided. Please consult restaurant opening and closing hours.")
+
+        elif(self.u_date < date):
+            tkMessageBox.showerror("error","Invalid date provided. Reservation failed.")
 
         #Verifying date format
         # elif(validate(self.u_date)):
@@ -279,23 +278,7 @@ class MakeReservation(tk.Frame):
                 peopleLeft=peopleLeft-capty[i]
                 i=i+1
 
-
-            # for r in res:
-            #     print(r)
-
-            # db = DBconnection.connecting()
-            # conn = db.connect()
-            # query ="WITH email AS (SELECT '{0}' AS var), rid AS (SELECT reservationid AS var FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) INSERT INTO user_books SELECT email.var, rid.var FROM email, rid;".format(useremail)
-            # conn.execute(query)
-            # conn.close()
-
-            # db = DBconnection.connecting()
-            # conn = db.connect()
-            # query = "WITH att AS (SELECT reservationid AS var FROM (SELECT * FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) as latest WHERE reservationid = latest.reservationid), restau AS (SELECT '{0}' AS var), tablenb AS (SELECT 2 AS var) INSERT INTO reservation_contains SELECT att.var, restau.var, tablenb.var FROM att, restau, tablenb;".format(licensenb)
-            # conn.execute(query)
-            # conn.close()
-
-
+            tkMessageBox.showinfo("Reservation successful","Reservation was successful!")
         # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage") 
@@ -305,4 +288,5 @@ class MakeReservation(tk.Frame):
     #             datetime.datetime.strptime(date_text, '%Y-%m-%d')
     #         except:
     #             raise ValueError("Incorrect data format, should be YYY-MM-DD")
+
 
