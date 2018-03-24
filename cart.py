@@ -234,7 +234,18 @@ class Paid(tk.Frame):
         setGlobal('total_price', str(total_price))
         self.total_price = tk.Label(self, text="Your made a payment of $"+str(total_price)+".")
         self.total_price.grid(row=2, column=1)
+
+        useremail = getGlobal('useremail')
+        cartid = getGlobal('cartid')
+        date = getGlobal('date')
+        db = DBconnection.connecting()
+        conn = db.connect()
+        query = "INSERT INTO transaction VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\');".format(useremail, cartid, total_price, date);
+        conn.execute(query)
+        conn.close()
+
         setGlobal('cartid', 'None')
+
 
     def homepage(self, event):
         self.controller.show_frame("Homepage")
