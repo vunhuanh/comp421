@@ -287,6 +287,13 @@ class MakeReservation(tk.Frame):
                     i=i+1
 
                 tkMessageBox.showinfo("Reservation successful","Reservation was successful!")
+                db = DBconnection.connecting()
+                conn = db.connect()
+                conn.autocommit = True
+                query = "UPDATE users SET points = points + 100 WHERE useremail = '{0}';".format(useremail)
+                conn.execute(query)
+                conn.close()
+
         # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage") 

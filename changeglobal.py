@@ -48,8 +48,6 @@ def setTime():
 
 
 
-
-
 if __name__=='__main__':
     # variable = getGlobal(parser, 'useremail')
     setTime()
