@@ -5,6 +5,7 @@ import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 from changeglobal import getGlobal, setGlobal
+import tkMessageBox
 
 inp = None
 
@@ -122,7 +123,11 @@ class MakeReview(tk.Frame):
 
     def on_button(self):
 
-        rating = self.entry.get()
+        rating = int(self.entry.get())
+
+        if (rating < 1) or (rating > 5):
+            tkMessageBox.showerror("error","Please enter a valid rating.")
+            return
 
         lines = self.text.get("1.0", tk.END).splitlines()
         comment = ""

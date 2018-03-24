@@ -5,6 +5,7 @@ import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 from changeglobal import getGlobal, setGlobal
+import tkMessageBox
 
 # Frame for making pickups
 class Pickup(tk.Frame):
@@ -86,7 +87,7 @@ class R_menu(tk.Frame):
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
         self.display_btn.grid(row=1, column=0)
-        
+
         #create_widgets(self.interior)
 
     # def create_widgets(self):
@@ -204,6 +205,7 @@ class R_menu(tk.Frame):
 
         #insert new records into pickup_order
         i = 0
+        invalid_count = 0
         pickup_price = float(getGlobal('pickup_price'))
         licensenb = getGlobal('lnb_pickup')
 
@@ -223,11 +225,19 @@ class R_menu(tk.Frame):
                 i += 1
             else:
                 i += 1
+                invalid_count += 1
                 continue
 
         conn.close()
+
+        #When all the quantities user entered are invalid
+        if invalid_count == i:
+            tkMessageBox.showerror("error","You did not select anything. Please check your selections again.")
+
+
         setGlobal('cartid', str(realid))
         setGlobal('pickup_price', str(pickup_price))
+        tkMessageBox.showinfo("Message","Added to cart successfully.")
 
 
     # Get global variable

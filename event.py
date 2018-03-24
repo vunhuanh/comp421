@@ -149,6 +149,7 @@ class Event(tk.Frame):
 
         setGlobal('cartid', str(realid))
         setGlobal('event_price', str(event_price))
+        tkMessageBox.showinfo("Message","Added to cart successfully.")
 
 
     # Go to homepage
