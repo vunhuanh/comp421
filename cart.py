@@ -232,8 +232,6 @@ class Paid(tk.Frame):
 
         total_price = float(getGlobal('pickup_price')) + float(getGlobal('event_price'))
         setGlobal('total_price', str(total_price))
-        self.total_price = tk.Label(self, text="Your made a payment of $"+str(total_price)+".")
-        self.total_price.grid(row=2, column=1)
 
         useremail = getGlobal('useremail')
         cartid = getGlobal('cartid')
@@ -242,7 +240,16 @@ class Paid(tk.Frame):
         conn = db.connect()
         query = "INSERT INTO transaction VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\');".format(useremail, cartid, total_price, date);
         conn.execute(query)
+
+        points_gained = int(total_price)
+        query = "UPDATE users SET points = points + \'{0}\' WHERE useremail = \'{1}\';".format(points_gained, useremail)
+        conn.execute(query)
+
         conn.close()
+
+        self.total_price = tk.Label(self, text="Your made a payment of $"+str(total_price)+".")
+        self.total_price.grid(row=2, column=1)
+
 
         setGlobal('cartid', 'None')
 
