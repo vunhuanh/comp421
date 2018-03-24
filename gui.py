@@ -44,11 +44,7 @@ class Application(tk.Tk):
         # Define frames
         self.frames = {}
 
-<<<<<<< HEAD
         for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Pickup, R_menu, Event, Cart, Review, Login, Signup, AllReviews, MakeReview):
-=======
-        for F in (Mainpage, Homepage, UserResr, UserPickup, UserEvent, Reserve, MakeReservation, Pickup, R_menu, Event, Cart, Review, Login, Signup, AllReviews, MakeReview, Scroll, Cart, Empty_Cart, Paid):
->>>>>>> master
 
             page_name = F.__name__
             frame = F(parent=container, controller=self)

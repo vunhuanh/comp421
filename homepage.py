@@ -86,20 +86,12 @@ class Homepage(tk.Frame):
 
     # Logout
     def logout(self, event):
-<<<<<<< HEAD
-        setGlobal('useremail', 'admin')
-        setGlobal('lnb_review', 'None')
-        setGlobal('lnb_reserve', 'None')
-        setGlobal('lnb_pickup', 'None')
-        setGlobal('lnb_event', 'None')
-=======
         setGlobal('useremail', 'None')
         setGlobal('lnb_reserve', 'None')
         setGlobal('lnb_pickup', 'None')
         setGlobal('lnb_event', 'None')
         setGlobal('lnb_review', 'None')
         setGlobal('cartid', 'None')
->>>>>>> master
 
         self.controller.show_frame("Mainpage")
 
