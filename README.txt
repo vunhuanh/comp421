@@ -1,4 +1,4 @@
-# Gourmet
+# Gourmet (NOTE: WE WILL DEMO ON MONDAY)
 Gourmet is an application which lets you reserve tables in our partnered restaurants, as well as buy event tickets and food.
 We have opted to write a functional GUI interface using Python and TKinter. 
 To run the application you will need:
