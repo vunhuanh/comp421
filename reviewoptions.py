@@ -5,6 +5,7 @@ import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 from changeglobal import getGlobal, setGlobal
+import tkMessageBox
 
 inp = None
 
@@ -69,9 +70,6 @@ class AllReviews(tk.Frame):
         irow = 4
         i = 0
         for r in date:
-            self.date.destroy()
-            self.rating.destroy()
-            self.comment.destroy()
 
             self.date = tk.Label(self, text=date[i])
             self.date.grid(row=irow, column=0)
@@ -125,13 +123,18 @@ class MakeReview(tk.Frame):
 
     def on_button(self):
 
-        rating = self.entry.get()
+        rating = int(self.entry.get())
+
+        if (rating < 1) or (rating > 5):
+            tkMessageBox.showerror("error","Please enter a valid rating.")
+            return
 
         lines = self.text.get("1.0", tk.END).splitlines()
         comment = ""
         for line in lines:
             comment += line
             comment += " "
+
 
         # Get restaurant license number from global variable
         useremail = getGlobal('useremail')
@@ -144,6 +147,7 @@ class MakeReview(tk.Frame):
         conn = db.connect()
 
         query = "INSERT INTO review VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\');".format(useremail, licensenb, comment, rating, date)
+
         conn.execute(query)
 
         conn.close()
