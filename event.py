@@ -5,6 +5,7 @@ import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 from changeglobal import getGlobal, setGlobal
+import tkMessageBox
 
 # Frame for buying event tickets
 class Event(tk.Frame):
@@ -115,6 +116,7 @@ class Event(tk.Frame):
 
         #insert new records into pickup_order
         i = 0
+        invalid_count = 0
         event_price = float(getGlobal('event_price'))
 
         #Connect to the db
@@ -135,11 +137,21 @@ class Event(tk.Frame):
                 i += 1
             else:
                 i += 1
+                invalid_count += 1
                 continue
 
         conn.close()
+
+        #When all the quantities user entered are invalid
+        if invalid_count == i:
+            tkMessageBox.showerror("error","You did not select anything. Please check your selections again.")
+
+
         setGlobal('cartid', str(realid))
         setGlobal('event_price', str(event_price))
+
+        #Show the cart window
+        self.controller.show_frame("Cart")
 
     # Go to homepage
     def homepage(self, event):
