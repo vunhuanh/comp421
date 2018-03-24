@@ -13,56 +13,29 @@ class Reserve(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        #self.create_widgets()
+        self.create_widgets()
 
-    # def create_widgets(self):
-    #     # Set min width to columns
-    #     self.grid_columnconfigure(0, minsize=150)
-    #     self.grid_columnconfigure(1, minsize=150)
-    #     self.grid_columnconfigure(2, minsize=150)
-    #     self.grid_rowconfigure(2, minsize=10)
-
-        self.hp_btn = tk.Button(self, text="Homepage")
-        self.hp_btn.bind('<Button-1>', self.homepage)
-        self.hp_btn.grid(row=0, column=0)
+    def create_widgets(self):
+        # Set min width to columns
+        self.grid_columnconfigure(0, minsize=150)
+        self.grid_columnconfigure(1, minsize=150)
+        self.grid_columnconfigure(2, minsize=150)
+        self.grid_rowconfigure(2, minsize=10)
 
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
         self.display_btn.grid(row=1, column=0)
-
-    def resize(self, event):
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=985, height=500)
         
     # Display page contents
     def display(self, event):
         
-        self.canvas = tk.Canvas(self, bd=0, highlightthickness=0)
-        self.canvas.grid(row=0, column=0)
-
-        self.vsbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
-        self.vsbar.grid(row=0, column=1, sticky='ns')
-        self.canvas.configure(yscrollcommand=self.vsbar.set)
-
-        # create a frame inside the canvas which will be scrolled with it
-        self.interior = tk.Frame(self.canvas)
-        self.canvas.create_window((0,0), window=self.interior, anchor='nw')
-
-        self.interior.bind("<Configure>", self.resize)
-        self.interior.grid_columnconfigure(0, minsize=150)
-        self.interior.grid_columnconfigure(1, minsize=150)
-        self.interior.grid_columnconfigure(2, minsize=150)
-
         # Header
-        self.hp_btn = tk.Button(self.interior, text="Homepage")
+        self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
 
-        self.display_btn = tk.Button(self.interior, text="Display")
-        self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=1, column=0)
-
-        self.desc = tk.Label(self.interior, text="Make a reservation", wraplength=400)
+        self.desc = tk.Label(self, text="Make a reservation", wraplength=400)
         self.desc.grid(row=1, column=1)
 
         # Connect to DB and get info
@@ -79,15 +52,15 @@ class Reserve(tk.Frame):
             restau.append(r[1])
 
         # Print relevant info
-        self.name = tk.Label(self.interior, text="Restaurant")
+        self.name = tk.Label(self, text="Restaurant")
         self.name.grid(row=3, column=1)
 
         irow = 4
         i = 0
         for r in restau:
-            self.res = tk.Label(self.interior, text=restau[i])
+            self.res = tk.Label(self, text=restau[i])
             self.res.grid(row=irow, column=1)  
-            self.ures = tk.Button(self.interior, text="Reserve")
+            self.ures = tk.Button(self, text="Reserve")
             print(licensenb[i])
             self.ures.bind('<Button-1>', lambda event, arg=licensenb[i]: self.mkres(event, arg))
             self.ures.grid(row=irow, column=2)
@@ -166,15 +139,16 @@ class MakeReservation(tk.Frame):
 
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{0}';".format(licensenb)
+        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table, (SELECT licensenb, tableid FROM r_table EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation, reservation_contains WHERE reservation.reservationid = reservation_contains.reservationid AND reservation.time::date = '{0}') AS e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{1}' ORDER BY r_table.tableid;".format(self.u_date,licensenb)
         result_set = conn.execute(query)
         conn.close()
 
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT licensenb FROM restaurant WHERE restaurant.licensenb = '{0}' AND restaurant.openinghours < '{1}' AND restaurant.closinghours > '{2}';".format(licensenb,self.u_time,self.u_time)
+        query = "SELECT licensenb FROM restaurant WHERE restaurant.licensenb = '{0}' AND (restaurant.openinghours < '{1}' OR restaurant.closinghours > '{2}');".format(licensenb,self.u_time,self.u_time)
         result_set2 = conn.execute(query)
         conn.close()
+
 
         licenseNB = []
         tables = []
@@ -192,6 +166,12 @@ class MakeReservation(tk.Frame):
         licenseNB2 = []
         for r2 in result_set2:
             licenseNB2.append(r2[0])
+
+        #FOR TESTING PURPOSES, CHECKING IF TABLES SORTED BY TABLE ID NUMBER
+        # print("BREAK///")
+
+        # print(tables)
+        # print(capty)
 
         #get total seats available across all tables
         total_seats = 0
@@ -241,8 +221,6 @@ class MakeReservation(tk.Frame):
             #     wreck = e[0]
 
 
-            # print(wreck)
-
             db = DBconnection.connecting()
             conn = db.connect()
             conn.autocommit = True
@@ -257,12 +235,19 @@ class MakeReservation(tk.Frame):
             conn.execute(query)
             conn.close()
 
-            db = DBconnection.connecting()
-            conn = db.connect()
-            conn.autocommit = True
-            query = "INSERT INTO reservation_contains VALUES({0},'{1}',1);".format(real_rid,licensenb)
-            conn.execute(query)
-            conn.close()
+            peopleLeft = int(self.u_quantity)
+            i = 0
+            while(peopleLeft > 0):
+                print(tables[i])
+                db = DBconnection.connecting()
+                conn = db.connect()
+                conn.autocommit = True
+                query = "INSERT INTO reservation_contains VALUES({0},'{1}',{2});".format(real_rid,licensenb,tables[i])
+                conn.execute(query)
+                conn.close()
+
+                peopleLeft=peopleLeft-capty[i]
+                i=i+1
 
 
             # for r in res:
