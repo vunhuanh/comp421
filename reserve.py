@@ -278,7 +278,7 @@ class MakeReservation(tk.Frame):
                 peopleLeft=peopleLeft-capty[i]
                 i=i+1
 
-
+            tkMessageBox.showinfo("Reservation successful","Reservation was successful!")
         # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage") 
