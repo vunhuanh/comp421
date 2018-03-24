@@ -69,9 +69,6 @@ class AllReviews(tk.Frame):
         irow = 4
         i = 0
         for r in date:
-            self.date.destroy()
-            self.rating.destroy()
-            self.comment.destroy()
 
             self.date = tk.Label(self, text=date[i])
             self.date.grid(row=irow, column=0)
@@ -133,6 +130,7 @@ class MakeReview(tk.Frame):
             comment += line
             comment += " "
 
+
         # Get restaurant license number from global variable
         useremail = getGlobal('useremail')
         licensenb = getGlobal('lnb_review')
@@ -144,6 +142,7 @@ class MakeReview(tk.Frame):
         conn = db.connect()
 
         query = "INSERT INTO review VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\');".format(useremail, licensenb, comment, rating, date)
+
         conn.execute(query)
 
         conn.close()

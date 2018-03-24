@@ -95,6 +95,7 @@ class Homepage(tk.Frame):
         setGlobal('pickup_price', '0.0')
         setGlobal('event_price', '0.0')
         setGlobal('total_price', '0.0')
+        setGlobal('irow', '4')
         self.controller.show_frame("Mainpage")
 
     def cart(self, event):

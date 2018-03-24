@@ -150,8 +150,6 @@ class Event(tk.Frame):
         setGlobal('cartid', str(realid))
         setGlobal('event_price', str(event_price))
 
-        #Show the cart window
-        self.controller.show_frame("Cart")
 
     # Go to homepage
     def homepage(self, event):
