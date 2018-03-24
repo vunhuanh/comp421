@@ -37,17 +37,6 @@ class Mainpage(tk.Frame):
         self.login_btn.bind('<Button-1>', self.login)
         self.login_btn.grid(row=3, column=1, sticky=tk.E)
 
-        self.hp_btn = tk.Button(self, text="Homepage")
-        self.hp_btn.bind('<Button-1>', self.homepage)
-        self.hp_btn.grid(row=4, column=1)
-
-        self.hp_btn = tk.Button(self, text="Scrollbar prototype done, see review.py")
-        self.hp_btn.bind('<Button-1>', self.scroll)
-        self.hp_btn.grid(row=5, column=1)
-
-    # Signup
-    def scroll(self, event):
-        self.controller.show_frame("Scroll")
 
     # Signup
     def signup(self, event):
@@ -57,7 +46,3 @@ class Mainpage(tk.Frame):
     def login(self, event):
         self.controller.show_frame("Login")
 
-    # Go to homepage
-    def homepage(self, event):
-        self.controller.show_frame("Homepage")
-        

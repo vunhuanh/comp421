@@ -41,6 +41,10 @@ def setTime():
     parser.set('SETTINGS', 'second', str(now.second))
     with open('config.ini', 'wb') as configfile: 
         parser.write(configfile)
+    date = '{0}-{1}-{2}'.format(str(now.year), str(now.month), str(now.day))
+    parser.set('SETTINGS', 'date', date)
+    with open('config.ini', 'wb') as configfile: 
+        parser.write(configfile)
 
 
 
