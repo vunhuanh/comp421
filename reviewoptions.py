@@ -5,7 +5,6 @@ import pandas.io.sql as psql
 import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 from changeglobal import getGlobal, setGlobal
-import tkMessageBox
 
 inp = None
 
@@ -45,7 +44,7 @@ class AllReviews(tk.Frame):
         # Connect to DB and select user's points
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT reviewdate, rating, comment FROM review WHERE licensenb=\'{0}\';".format(licensenb)
+        query = "SELECT reviewdate, rating, comment FROM review WHERE licensenb='{0}';".format(licensenb)
         result_set = conn.execute(query)
         conn.close()
 
@@ -126,18 +125,14 @@ class MakeReview(tk.Frame):
 
     def on_button(self):
 
-        rating = int(self.entry.get())
+        rating = self.entry.get()
 
-        if (rating < 1) or (rating > 5):
-            tkMessageBox.showerror("error","Please enter a valid rating.")
+        comment = self.text.get("1.0", tk.END).splitlines()
+        # comment = ""
+        # for line in lines:
+        #     comment += line
+        #     comment += " "
 
-        lines = self.text.get("1.0", tk.END).splitlines()
-        comment = ""
-        for line in lines:
-            comment += line
-            comment += " "
-        
-        print isinstance(comment, basestring)
         # Get restaurant license number from global variable
         useremail = getGlobal('useremail')
         licensenb = getGlobal('lnb_review')
@@ -148,23 +143,10 @@ class MakeReview(tk.Frame):
         db = DBconnection.connecting()
         conn = db.connect()
 
-        query_select = "SELECT * FROM review WHERE useremail=\'{0}\' AND licensenb=\'{1}\';".format(useremail, licensenb)
-        print "HERE"
-        #row_count = conn.execute(query_select)
-        print "HERE2"
+        query = "INSERT INTO review VALUES (r'{0}r', r'{1}r', r'{2}r', r'{3}r', r'{4}r');".format(useremail, licensenb, comment, rating, date)
+        conn.execute(query)
 
-
-        try:
-            print "Did not find it"
-            query = "INSERT INTO review VALUES (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\');".format(useremail, licensenb, comment, rating, date)
-            conn.execute(query)
-            print "great"
-        except (Exception):
-            query = "UPDATE review SET comment = \'{0}\', rating = \'{1}\', reviewdate = \'{2}\' WHERE useremail = \'{3}\' AND licensenb = \'{4}\';".format(comment, rating, date, useremail, licensenb)
-            conn.execute(query)
-            print "noooo"
-        finally:
-            conn.close()
+        conn.close()
 
 
 
