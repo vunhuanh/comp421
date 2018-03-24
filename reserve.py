@@ -169,116 +169,124 @@ class MakeReservation(tk.Frame):
         useremail = getGlobal('useremail')
         date = getGlobal('date')
 
-        db = DBconnection.connecting()
-        conn = db.connect()
-        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table, (SELECT licensenb, tableid FROM r_table EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation, reservation_contains WHERE reservation.reservationid = reservation_contains.reservationid AND reservation.time::date = '{0}') AS e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{1}' ORDER BY r_table.tableid;".format(self.u_date,licensenb)
-        result_set = conn.execute(query)
-        conn.close()
-
-        db = DBconnection.connecting()
-        conn = db.connect()
-        query = "SELECT licensenb FROM restaurant WHERE restaurant.licensenb = '{0}' AND (restaurant.openinghours < '{1}' OR restaurant.closinghours > '{2}');".format(licensenb,self.u_time,self.u_time)
-        result_set2 = conn.execute(query)
-        conn.close()
-
-
-        licenseNB = []
-        tables = []
-        capty = []
-
-
-        for r in result_set:
-            licenseNB.append(r[0])
-            print(r[0])
-            tables.append(r[1])
-            print(r[1])
-            capty.append(r[2])
-            print(r[2])
-
-        licenseNB2 = []
-        for r2 in result_set2:
-            licenseNB2.append(r2[0])
-
-
-        #get total seats available across all tables
-        total_seats = 0
-        for c in capty:
-            total_seats+=c
-
-        # print("total seats avail: ")
-        # print(total_seats)
-
-        # print("total quant input: " + self.u_quantity)
-
-        timestamp = self.u_date + " " + self.u_time
-
-        if(int(self.u_quantity) > total_seats):
-            tkMessageBox.showerror("error","There aren't enough seats to accomodate the number of diners mentioned. Reservation failed.")
-
-        #Checking if time input falls between opening hours and closing hours for the restaurant
-        elif(not licenseNB2):
-            tkMessageBox.showerror("error","Invalid time provided. Please consult restaurant opening and closing hours.")
-
-        elif(self.u_date < date):
-            tkMessageBox.showerror("error","Invalid date provided. Reservation failed.")
-
-        #Verifying date format
-        # elif(validate(self.u_date)):
-        #     print("Wrong date format")
-
+        if(validate_date(self.u_date) == False):
+            tkMessageBox.showerror("error","Invalid date format. Expected format is YYYY-MM-DD")
+        elif(validate_time(self.u_time) == False):
+            tkMessageBox.showerror("error","Invalid time format. Expected format is HH:MM")
+        elif(int(self.u_quantity) < 1):
+            tkMessageBox.showerror("error","Number of attendees must be at least 1.")
         else:
-            print(useremail)
-
             db = DBconnection.connecting()
             conn = db.connect()
-            conn.autocommit = True
-            query = "SELECT reservationid FROM reservation ORDER BY reservationid DESC LIMIT 1;"
-            rid = conn.execute(query)
+            query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table, (SELECT licensenb, tableid FROM r_table EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation, reservation_contains WHERE reservation.reservationid = reservation_contains.reservationid AND reservation.time::date = '{0}') AS e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{1}' ORDER BY r_table.tableid;".format(self.u_date,licensenb)
+            result_set = conn.execute(query)
             conn.close()
-
-            for r in rid:
-                real_rid = r[0] + 1
-
-            # db = DBconnection.connecting()
-            # conn = db.connect()
-            # conn.autocommit = True
-            # query2 = "SELECT * FROM make_reservation('{0}',{1},'{2}','{3}',{4});".format(useremail,real_rid,licensenb,timestamp,self.u_quantity)
-            # result3 = conn.execute(query2)
-            # conn.close()
-
-            # for e in result3:
-            #     wreck = e[0]
 
 
             db = DBconnection.connecting()
             conn = db.connect()
-            conn.autocommit = True
-            query = "INSERT INTO reservation VALUES({0},'{1}',{2});".format(real_rid,timestamp,self.u_quantity)
-            conn.execute(query)
+            query = "SELECT licensenb FROM restaurant WHERE restaurant.licensenb = '{0}' AND (restaurant.openinghours < '{1}' OR restaurant.closinghours > '{2}');".format(licensenb,self.u_time,self.u_time)
+            result_set2 = conn.execute(query)
             conn.close()
 
-            db = DBconnection.connecting()
-            conn = db.connect()
-            conn.autocommit = True
-            query = "INSERT INTO user_books VALUES('{0}',{1});".format(useremail,real_rid)
-            conn.execute(query)
-            conn.close()
 
-            peopleLeft = int(self.u_quantity)
-            i = 0
-            while(peopleLeft > 0):
-                print(tables[i])
+            licenseNB = []
+            tables = []
+            capty = []
+
+
+            for r in result_set:
+                licenseNB.append(r[0])
+                print(r[0])
+                tables.append(r[1])
+                print(r[1])
+                capty.append(r[2])
+                print(r[2])
+
+            licenseNB2 = []
+            for r2 in result_set2:
+                licenseNB2.append(r2[0])
+
+
+            #get total seats available across all tables
+            total_seats = 0
+            for c in capty:
+                total_seats+=c
+
+            # print("total seats avail: ")
+            # print(total_seats)
+
+            # print("total quant input: " + self.u_quantity)
+
+            timestamp = self.u_date + " " + self.u_time
+
+            if(int(self.u_quantity) > total_seats):
+                tkMessageBox.showerror("error","There aren't enough seats to accomodate the number of diners mentioned. Reservation failed.")
+
+            #Checking if time input falls between opening hours and closing hours for the restaurant
+            elif(not licenseNB2):
+                tkMessageBox.showerror("error","Invalid time provided. Please consult restaurant opening and closing hours.")
+
+            elif(self.u_date < date):
+                tkMessageBox.showerror("error","Invalid date provided. Reservation failed.")
+
+            #Verifying date format
+            # elif(validate(self.u_date)):
+            #     print("Wrong date format")
+
+            else:
+                print(useremail)
+
                 db = DBconnection.connecting()
                 conn = db.connect()
                 conn.autocommit = True
-                query = "INSERT INTO reservation_contains VALUES({0},'{1}',{2});".format(real_rid,licensenb,tables[i])
+                query = "SELECT reservationid FROM reservation ORDER BY reservationid DESC LIMIT 1;"
+                rid = conn.execute(query)
+                conn.close()
+
+                for r in rid:
+                    real_rid = r[0] + 1
+
+                # db = DBconnection.connecting()
+                # conn = db.connect()
+                # conn.autocommit = True
+                # query2 = "SELECT * FROM make_reservation('{0}',{1},'{2}','{3}',{4});".format(useremail,real_rid,licensenb,timestamp,self.u_quantity)
+                # result3 = conn.execute(query2)
+                # conn.close()
+
+                # for e in result3:
+                #     wreck = e[0]
+
+
+                db = DBconnection.connecting()
+                conn = db.connect()
+                conn.autocommit = True
+                query = "INSERT INTO reservation VALUES({0},'{1}',{2});".format(real_rid,timestamp,self.u_quantity)
                 conn.execute(query)
                 conn.close()
 
-                peopleLeft=peopleLeft-capty[i]
-                i=i+1
+                db = DBconnection.connecting()
+                conn = db.connect()
+                conn.autocommit = True
+                query = "INSERT INTO user_books VALUES('{0}',{1});".format(useremail,real_rid)
+                conn.execute(query)
+                conn.close()
 
-            tkMessageBox.showinfo("Reservation successful","Reservation was successful!")
+                peopleLeft = int(self.u_quantity)
+                i = 0
+                while(peopleLeft > 0):
+                    print(tables[i])
+                    db = DBconnection.connecting()
+                    conn = db.connect()
+                    conn.autocommit = True
+                    query = "INSERT INTO reservation_contains VALUES({0},'{1}',{2});".format(real_rid,licensenb,tables[i])
+                    conn.execute(query)
+                    conn.close()
+
+                    peopleLeft=peopleLeft-capty[i]
+                    i=i+1
+
+                tkMessageBox.showinfo("Reservation successful","Reservation was successful!")
         # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage") 
@@ -289,4 +297,16 @@ class MakeReservation(tk.Frame):
     #         except:
     #             raise ValueError("Incorrect data format, should be YYY-MM-DD")
 
+def validate_date(d):
+    try:
+        datetime.datetime.strptime(d, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
 
+def validate_time(t):
+    try:
+        datetime.datetime.strptime(t, '%H:%M')
+        return True
+    except ValueError:
+        return False
