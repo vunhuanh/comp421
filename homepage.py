@@ -1,4 +1,4 @@
-import Tkinter as tk  
+import Tkinter as tk
 import psycopg2
 import sqlalchemy
 import pandas.io.sql as psql
@@ -22,12 +22,12 @@ class Homepage(tk.Frame):
         self.grid_columnconfigure(0, minsize=150)
         self.grid_columnconfigure(1, minsize=150)
         self.grid_columnconfigure(2, minsize=150)
-        
+
         # Display
         self.display_btn = tk.Button(self, text="Display")
         self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=4)
-    
+        self.display_btn.grid(row=1, column=0)
+
     # Display page contents
     def display(self, event):
         # Header
@@ -82,15 +82,24 @@ class Homepage(tk.Frame):
 
         self.review_btn = tk.Button(self, text="Review a restaurant")
         self.review_btn.bind('<Button-1>', self.review)
-        self.review_btn.grid(row=10, column=1, sticky=tk.W)  
+        self.review_btn.grid(row=10, column=1, sticky=tk.W)
 
     # Logout
     def logout(self, event):
+<<<<<<< HEAD
         setGlobal('useremail', 'admin')
         setGlobal('lnb_review', 'None')
         setGlobal('lnb_reserve', 'None')
         setGlobal('lnb_pickup', 'None')
         setGlobal('lnb_event', 'None')
+=======
+        setGlobal('useremail', 'None')
+        setGlobal('lnb_reserve', 'None')
+        setGlobal('lnb_pickup', 'None')
+        setGlobal('lnb_event', 'None')
+        setGlobal('lnb_review', 'None')
+        setGlobal('cartid', 'None')
+>>>>>>> master
 
         self.controller.show_frame("Mainpage")
 
@@ -107,11 +116,11 @@ class Homepage(tk.Frame):
         db = DBconnection.connecting()
         conn = db.connect()
         query = "SELECT points FROM users WHERE useremail='{0}';".format(useremail)
-        result_set = conn.execute(query)  
+        result_set = conn.execute(query)
         conn.close()
-        for r in result_set:  
+        for r in result_set:
             nbpoints = r[0]
-        
+
         strpoints = "You have "
         strpoints += str(nbpoints)
         strpoints += " points"
@@ -145,5 +154,3 @@ class Homepage(tk.Frame):
     # Review restaurant
     def review(self, event):
         self.controller.show_frame("Review")
-
-

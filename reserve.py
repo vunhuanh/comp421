@@ -13,29 +13,56 @@ class Reserve(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        self.create_widgets()
+        #self.create_widgets()
 
-    def create_widgets(self):
-        # Set min width to columns
-        self.grid_columnconfigure(0, minsize=150)
-        self.grid_columnconfigure(1, minsize=150)
-        self.grid_columnconfigure(2, minsize=150)
-        self.grid_rowconfigure(2, minsize=10)
+    # def create_widgets(self):
+    #     # Set min width to columns
+    #     self.grid_columnconfigure(0, minsize=150)
+    #     self.grid_columnconfigure(1, minsize=150)
+    #     self.grid_columnconfigure(2, minsize=150)
+    #     self.grid_rowconfigure(2, minsize=10)
 
-        # Display
-        self.display_btn = tk.Button(self, text="Display")
-        self.display_btn.bind('<Button-1>', self.display)
-        self.display_btn.grid(row=0, column=4)
-        
-    # Display page contents
-    def display(self, event):
-        
-        # Header
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
         self.hp_btn.grid(row=0, column=0)
 
-        self.desc = tk.Label(self, text="Make a reservation", wraplength=400)
+        # Display
+        self.display_btn = tk.Button(self, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=1, column=0)
+
+    def resize(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=985, height=500)
+        
+    # Display page contents
+    def display(self, event):
+        
+        self.canvas = tk.Canvas(self, bd=0, highlightthickness=0)
+        self.canvas.grid(row=0, column=0)
+
+        self.vsbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.vsbar.grid(row=0, column=1, sticky='ns')
+        self.canvas.configure(yscrollcommand=self.vsbar.set)
+
+        # create a frame inside the canvas which will be scrolled with it
+        self.interior = tk.Frame(self.canvas)
+        self.canvas.create_window((0,0), window=self.interior, anchor='nw')
+
+        self.interior.bind("<Configure>", self.resize)
+        self.interior.grid_columnconfigure(0, minsize=150)
+        self.interior.grid_columnconfigure(1, minsize=150)
+        self.interior.grid_columnconfigure(2, minsize=150)
+
+        # Header
+        self.hp_btn = tk.Button(self.interior, text="Homepage")
+        self.hp_btn.bind('<Button-1>', self.homepage)
+        self.hp_btn.grid(row=0, column=0)
+
+        self.display_btn = tk.Button(self.interior, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=1, column=0)
+
+        self.desc = tk.Label(self.interior, text="Make a reservation", wraplength=400)
         self.desc.grid(row=1, column=1)
 
         # Connect to DB and get info
@@ -52,15 +79,15 @@ class Reserve(tk.Frame):
             restau.append(r[1])
 
         # Print relevant info
-        self.name = tk.Label(self, text="Restaurant")
+        self.name = tk.Label(self.interior, text="Restaurant")
         self.name.grid(row=3, column=1)
 
         irow = 4
         i = 0
         for r in restau:
-            self.res = tk.Label(self, text=restau[i])
+            self.res = tk.Label(self.interior, text=restau[i])
             self.res.grid(row=irow, column=1)  
-            self.ures = tk.Button(self, text="Reserve")
+            self.ures = tk.Button(self.interior, text="Reserve")
             print(licensenb[i])
             self.ures.bind('<Button-1>', lambda event, arg=licensenb[i]: self.mkres(event, arg))
             self.ures.grid(row=irow, column=2)
@@ -69,9 +96,8 @@ class Reserve(tk.Frame):
             irow += 1
 
     def mkres(self, event, arg):
-        globalvar.lnb_reserve = arg
+        setGlobal('lnb_reserve',arg)
         self.controller.show_frame("MakeReservation")
-        print(globalvar.lnb_reserve)
 
     # Go to homepage
     def homepage(self, event):
@@ -90,6 +116,14 @@ class MakeReservation(tk.Frame):
         self.grid_columnconfigure(1, minsize =150)
         self.grid_columnconfigure(2, minsize=150)
         self.grid_rowconfigure(2, minsize=10)
+
+        # Display
+        self.display_btn = tk.Button(self, text="Display")
+        self.display_btn.bind('<Button-1>', self.display)
+        self.display_btn.grid(row=1, column=0)
+        
+    # Display page contents
+    def display(self, event):
 
         self.hp_btn = tk.Button(self, text="Homepage")
         self.hp_btn.bind('<Button-1>', self.homepage)
@@ -132,7 +166,7 @@ class MakeReservation(tk.Frame):
 
         db = DBconnection.connecting()
         conn = db.connect()
-        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE LOCALTIME(0) > openinghours AND LOCALTIME(0) < closinghours AND restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{0}';".format(licensenb)
+        query = "SELECT r_table.licensenb, r_table.tableid, r_table.capacity FROM r_table,(SELECT licensenb, tableid FROM r_table WHERE exists (SELECT licensenb FROM restaurant WHERE restaurant.licensenb = r_table.licensenb) EXCEPT SELECT reservation_contains.licensenb, reservation_contains.tableid FROM reservation_contains WHERE EXISTS (SELECT licensenb FROM restaurant WHERE restaurant.licensenb = reservation_contains.licensenb)) as e WHERE r_table.licensenb = e.licensenb AND r_table.tableid = e.tableid AND r_table.licensenb = '{0}';".format(licensenb)
         result_set = conn.execute(query)
         conn.close()
 
@@ -169,7 +203,7 @@ class MakeReservation(tk.Frame):
 
         print("total quant input: " + self.u_quantity)
 
-        timestamp = self.u_date + self.u_time
+        timestamp = self.u_date + " " + self.u_time
 
         if(int(self.u_quantity) > total_seats):
             print("There aren't enough seats to accomodate the number of diners mentioned.")
@@ -180,32 +214,80 @@ class MakeReservation(tk.Frame):
             print("Nope, not happening.")
 
         #Verifying date format
-        elif:
-            try:
-                datetime.datetime.strptime(self.u_date, '%Y-%m-%d')
-            except:
-                raise ValueError("Incorrect data format, should be YYY-MM-DD")
+        # elif(validate(self.u_date)):
+        #     print("Wrong date format")
 
         else:
+            print(useremail)
+
             db = DBconnection.connecting()
             conn = db.connect()
-            query = "INSERT INTO reservation VALUES (default, '{0}', '{1}');".format(timestamp,int(self.u_quantity))
+            conn.autocommit = True
+            query = "SELECT reservationid FROM reservation ORDER BY reservationid DESC LIMIT 1;"
+            rid = conn.execute(query)
+            conn.close()
+
+            for r in rid:
+                real_rid = r[0] + 1
+
+            # db = DBconnection.connecting()
+            # conn = db.connect()
+            # conn.autocommit = True
+            # query2 = "SELECT * FROM make_reservation('{0}',{1},'{2}','{3}',{4});".format(useremail,real_rid,licensenb,timestamp,self.u_quantity)
+            # result3 = conn.execute(query2)
+            # conn.close()
+
+            # for e in result3:
+            #     wreck = e[0]
+
+
+            # print(wreck)
+
+            db = DBconnection.connecting()
+            conn = db.connect()
+            conn.autocommit = True
+            query = "INSERT INTO reservation VALUES({0},'{1}',{2});".format(real_rid,timestamp,self.u_quantity)
             conn.execute(query)
             conn.close()
 
             db = DBconnection.connecting()
             conn = db.connect()
-            query = "WITH email AS (SELECT cast('{0}' as text) AS var), rid AS (SELECT reservationid AS var FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) INSERT INTO user_books SELECT email.var, rid.var FROM email, rid;".format(useremail)
+            conn.autocommit = True
+            query = "INSERT INTO user_books VALUES('{0}',{1});".format(useremail,real_rid)
             conn.execute(query)
             conn.close()
 
             db = DBconnection.connecting()
             conn = db.connect()
-            query = "WITH att AS (SELECT reservationid AS var FROM (SELECT * FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) as latest WHERE reservationid = latest.reservationid), restau AS (SELECT cast('{0}' as text) AS var), tablenb AS (SELECT 3 AS var) INSERT INTO reservation_contains SELECT att.var, restau.var, tablenb.var FROM att, restau, tablenb;".format(licensenb)
+            conn.autocommit = True
+            query = "INSERT INTO reservation_contains VALUES({0},'{1}',1);".format(real_rid,licensenb)
+            conn.execute(query)
+            conn.close()
 
+
+            # for r in res:
+            #     print(r)
+
+            # db = DBconnection.connecting()
+            # conn = db.connect()
+            # query ="WITH email AS (SELECT '{0}' AS var), rid AS (SELECT reservationid AS var FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) INSERT INTO user_books SELECT email.var, rid.var FROM email, rid;".format(useremail)
+            # conn.execute(query)
+            # conn.close()
+
+            # db = DBconnection.connecting()
+            # conn = db.connect()
+            # query = "WITH att AS (SELECT reservationid AS var FROM (SELECT * FROM reservation WHERE reservationid >= ALL (SELECT reservationid FROM reservation)) as latest WHERE reservationid = latest.reservationid), restau AS (SELECT '{0}' AS var), tablenb AS (SELECT 2 AS var) INSERT INTO reservation_contains SELECT att.var, restau.var, tablenb.var FROM att, restau, tablenb;".format(licensenb)
+            # conn.execute(query)
+            # conn.close()
 
 
         # Go to homepage
     def homepage(self, event):
         self.controller.show_frame("Homepage") 
+
+    # def validate(date_text):
+    #         try:
+    #             datetime.datetime.strptime(date_text, '%Y-%m-%d')
+    #         except:
+    #             raise ValueError("Incorrect data format, should be YYY-MM-DD")
 
