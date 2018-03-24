@@ -6,6 +6,7 @@ import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 from changeglobal import setGlobal, getGlobal
 import datetime
+import tkMessageBox
 
 # Frame for buying event tickets
 class Reserve(tk.Frame):
