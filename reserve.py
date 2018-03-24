@@ -249,7 +249,8 @@ class MakeReservation(tk.Frame):
 
             # for e in result3:
             #     wreck = e[0]
-
+            #test
+            print("aa")
 
             db = DBconnection.connecting()
             conn = db.connect()
