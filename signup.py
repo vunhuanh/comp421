@@ -6,6 +6,7 @@ import DBconnection
 from sqlalchemy import Table, Column, String, MetaData
 from changeglobal import setGlobal, getGlobal
 import tkMessageBox
+import datetime
 
 
 class Signup(tk.Frame):
@@ -54,20 +55,23 @@ class Signup(tk.Frame):
         self.givenpassword = self.passwordbox.get()
         self.givenbirthday = self.birthdaybox.get()
         print self.givenbirthday
-        db = DBconnection.connecting()
-        conn = db.connect()
-        query = "INSERT INTO users VALUES (\'{0}\', \'{1}\', default, \'{2}\');".format(self.givenemail, self.givenpassword, self.givenbirthday);
-
-        
-        try:
-            result_set = conn.execute(query)
-            conn.close()
-        except psycopg2.Error as e:
-            tkMessageBox.showerror("error","the account is already existed")
-            conn.close()
+        if(validate_date(self.givenbirthday)==False):
+            tkMessageBox.showerror("error","Invalid birthday format. Expected format is YYYY-MM-DD")
         else:
-            tkMessageBox.showinfo("account created", "your account is successfully created")
-            conn.close()
+            db = DBconnection.connecting()
+            conn = db.connect()
+            query = "INSERT INTO users VALUES (\'{0}\', \'{1}\', default, \'{2}\');".format(self.givenemail, self.givenpassword, self.givenbirthday);
+
+            
+            try:
+                result_set = conn.execute(query)
+                conn.close()
+            except psycopg2.Error as e:
+                tkMessageBox.showerror("error","the account is already existed")
+                conn.close()
+            else:
+                tkMessageBox.showinfo("account created", "your account is successfully created")
+                conn.close()
 
     
 
@@ -76,7 +80,12 @@ class Signup(tk.Frame):
     def mainpage(self, login):
         self.controller.show_frame("Mainpage")
 
-
+def validate_date(d):
+    try:
+        datetime.datetime.strptime(d, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
     
 
 
