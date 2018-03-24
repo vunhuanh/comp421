@@ -127,11 +127,11 @@ class MakeReview(tk.Frame):
 
         rating = self.entry.get()
 
-        lines = self.text.get("1.0", tk.END).splitlines()
-        comment = ""
-        for line in lines:
-            comment += line
-            comment += " "
+        comment = self.text.get("1.0", tk.END).splitlines()
+        # comment = ""
+        # for line in lines:
+        #     comment += line
+        #     comment += " "
 
         # Get restaurant license number from global variable
         useremail = getGlobal('useremail')
